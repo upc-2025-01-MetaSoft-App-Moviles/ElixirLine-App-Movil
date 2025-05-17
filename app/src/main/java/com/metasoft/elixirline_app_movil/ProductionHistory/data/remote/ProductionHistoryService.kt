@@ -1,6 +1,6 @@
-package com.metasoft.elixirline_app_movil.data.remote
+package com.metasoft.elixirline_app_movil.ProductionHistory.data.remote
 
-import com.metasoft.elixirline_app_movil.data.model.ProductionHistoryResponse
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.model.ProductionHistoryResponse
 import retrofit2.Response
 import retrofit2.http.GET
 

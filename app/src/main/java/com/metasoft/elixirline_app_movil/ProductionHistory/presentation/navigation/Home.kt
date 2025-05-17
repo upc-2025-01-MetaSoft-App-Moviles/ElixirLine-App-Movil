@@ -1,4 +1,4 @@
-package com.metasoft.elixirline_app_movil.presentation.navigation
+package com.metasoft.elixirline_app_movil.ProductionHistory.presentation.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.metasoft.elixirline_app_movil.presentation.view.FindAllProductionHistoryView
+import com.metasoft.elixirline_app_movil.ProductionHistory.presentation.view.FindAllProductionHistoryView
 
 @Preview
 @Composable

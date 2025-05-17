@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.metasoft.elixirline_app_movil.presentation.navigation.Home
+import com.metasoft.elixirline_app_movil.ProductionHistory.presentation.navigation.Home
 import com.metasoft.elixirline_app_movil.ui.theme.ElixirLineAppMovilTheme
 
 class MainActivity : ComponentActivity() {

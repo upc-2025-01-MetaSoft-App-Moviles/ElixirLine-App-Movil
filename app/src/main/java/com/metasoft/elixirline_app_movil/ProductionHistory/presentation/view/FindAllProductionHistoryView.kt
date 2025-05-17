@@ -1,4 +1,4 @@
-package com.metasoft.elixirline_app_movil.presentation.view
+package com.metasoft.elixirline_app_movil.ProductionHistory.presentation.view
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -15,8 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.metasoft.elixirline_app_movil.R
-import com.metasoft.elixirline_app_movil.data.di.DataModule
-import com.metasoft.elixirline_app_movil.domain.model.ProductionHistory
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.di.DataModule
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.remote.ApiConstants
+import com.metasoft.elixirline_app_movil.ProductionHistory.model.ProductionHistory
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -38,7 +39,7 @@ fun FindAllProductionHistoryView() {
         error.value = null
 
         try {
-            Log.d("FindAllProductionHistory", "Consultando API con URL base: ${com.metasoft.elixirline_app_movil.data.remote.ApiConstants.BASE_URL}")
+            Log.d("FindAllProductionHistory", "Consultando API con URL base: ${ApiConstants.BASE_URL}")
             Log.d("FindAllProductionHistory", "UUID de consulta: $uuid")
 
             // Cargar datos

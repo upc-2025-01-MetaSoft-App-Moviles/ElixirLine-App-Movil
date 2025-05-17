@@ -1,9 +1,9 @@
-package com.metasoft.elixirline_app_movil.presentation.viewmodel
+package com.metasoft.elixirline_app_movil.ProductionHistory.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.metasoft.elixirline_app_movil.data.repository.ProductionRepository
-import com.metasoft.elixirline_app_movil.domain.model.ProductionHistory
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.repository.ProductionRepository
+import com.metasoft.elixirline_app_movil.ProductionHistory.model.ProductionHistory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

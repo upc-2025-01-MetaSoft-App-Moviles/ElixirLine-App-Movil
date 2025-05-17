@@ -1,9 +1,9 @@
-package com.metasoft.elixirline_app_movil.data.di
+package com.metasoft.elixirline_app_movil.ProductionHistory.data.di
 
 import androidx.room.Room
-import com.metasoft.elixirline_app_movil.data.remote.ApiConstants
-import com.metasoft.elixirline_app_movil.data.remote.ProductionHistoryService
-import com.metasoft.elixirline_app_movil.data.repository.ProductionRepository
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.remote.ApiConstants
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.remote.ProductionHistoryService
+import com.metasoft.elixirline_app_movil.ProductionHistory.data.repository.ProductionRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

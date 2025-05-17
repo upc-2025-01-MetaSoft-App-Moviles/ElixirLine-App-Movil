@@ -1,4 +1,4 @@
-package com.metasoft.elixirline_app_movil.domain.model
+package com.metasoft.elixirline_app_movil.ProductionHistory.model
 
 import java.util.UUID
 
