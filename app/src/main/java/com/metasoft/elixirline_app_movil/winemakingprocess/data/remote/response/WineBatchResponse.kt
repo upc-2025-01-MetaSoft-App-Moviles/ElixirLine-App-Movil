@@ -24,6 +24,9 @@ data class WineBatchResponse(
     @SerializedName("status")
     val status: String,
     @SerializedName("current_stage")
-    val currentStage: String
+    val currentStage: String,
+    @SerializedName("url_image")
+    val urlImage: String,
+
     // Puedes incluir winemakingStages si el backend lo devuelve
 )
