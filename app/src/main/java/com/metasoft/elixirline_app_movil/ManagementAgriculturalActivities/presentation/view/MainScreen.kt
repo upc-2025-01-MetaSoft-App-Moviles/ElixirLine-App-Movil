@@ -1,5 +1,8 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view
 
+import android.os.Build
+import android.text.format.DateUtils.formatDateTime
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,14 +25,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavController) {
     val factory = remember { MainViewModelFactory() }
     val viewModel: MainViewModel = viewModel(factory = factory)
 
     val weather by viewModel.weatherInfo.collectAsStateWithLifecycle()
-    val Tasks by viewModel.Taskes.collectAsStateWithLifecycle()
+    val Tasks by viewModel.Tasks.collectAsStateWithLifecycle()
 
     val darkRed = Color(0xFF8B0000)
     val fondo = Color(0xFFF2F8FF)
@@ -95,15 +101,15 @@ fun MainScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            InfoCard(title = "Próximas Taskes agendadas") {
+            InfoCard(title = "Próximas Tasks agendadas") {
                 if (Tasks.isNotEmpty()) {
                     Tasks.forEach {
                         Text(
                             buildAnnotatedString {
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("${it.fecha} – ${it.hora}: ")
+                                    append("${formatDateTime(it.scheduledDate)}: ")
                                 }
-                                append(it.descripcion)
+                                append(it.description)
                             },
                             color = Color.Black
                         )
@@ -191,5 +197,17 @@ fun QuickAccessButton(text: String, modifier: Modifier = Modifier, onClick: () -
         contentPadding = PaddingValues(vertical = 6.dp)
     ) {
         Text(text = text, color = Color.Black, fontSize = 14.sp)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatDateTime(isoDateTime: String): String {
+    return try {
+        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+        val dateTime = OffsetDateTime.parse(isoDateTime, formatter)
+        val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy – HH:mm")
+        outputFormatter.format(dateTime)
+    } catch (e: Exception) {
+        "Fecha inválida"
     }
 }

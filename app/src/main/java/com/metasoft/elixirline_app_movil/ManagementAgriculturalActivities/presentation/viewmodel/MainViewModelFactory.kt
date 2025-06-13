@@ -2,11 +2,12 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.local.TaskesLocalDataSource
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.local.TasksLocalDataSource
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.local.WeatherLocalDataSource
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.WeatherRepositoryImpl
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetTaskesUseCase
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.TaskRepositoryImpl
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetTasksUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetWeatherUseCase
 
 class MainViewModelFactory : ViewModelProvider.Factory {
@@ -15,12 +16,12 @@ class MainViewModelFactory : ViewModelProvider.Factory {
             val fakeApi = FakeApiService()
 
             val climaRepo = WeatherRepositoryImpl(fakeApi)
-            val TaskesRepo = TaskRepositoryImpl(fakeApi)
+            val TasksRepo = TaskRepositoryImpl(fakeApi)
 
             val climaUseCase = GetWeatherUseCase(climaRepo)
-            val TaskesUseCase = GetTaskesUseCase(TaskesRepo)
+            val TasksUseCase = GetTasksUseCase(TasksRepo)
 
-            return MainViewModel(climaUseCase, TaskesUseCase) as T
+            return MainViewModel(climaUseCase, TasksUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
