@@ -3,5 +3,5 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domai
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.TaskExecutionReport
 
 interface TaskReportRepository {
-    suspend fun getReports(): List<TaskExecutionReport>
+    suspend fun getReports(taskId: String): List<TaskExecutionReport>
 }

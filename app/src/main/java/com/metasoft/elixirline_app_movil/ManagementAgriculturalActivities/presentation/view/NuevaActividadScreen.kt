@@ -48,7 +48,7 @@ fun NuevaTaskScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Nueva Task", color = Color.White, fontSize = 20.sp)
+                    Text("Nueva Actividad", color = Color.White, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -83,7 +83,7 @@ fun NuevaTaskScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    TituloCampo("Tipo de Task:")
+                    TituloCampo("Tipo de actividad:")
                     CampoSeleccion(valorActual = tipoTask, opciones = opcionesTask) {
                         tipoTask = it
                     }
@@ -165,7 +165,7 @@ fun NuevaTaskScreen(navController: NavController) {
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Guardar Task", color = Color.White, fontSize = 16.sp)
+                Text("Guardar actividad", color = Color.White, fontSize = 16.sp)
             }
         }
     }

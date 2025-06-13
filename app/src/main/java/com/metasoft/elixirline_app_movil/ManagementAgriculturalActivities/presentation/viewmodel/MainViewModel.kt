@@ -2,8 +2,10 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Weather
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetParcelsUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetWeatherUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetTasksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val getWeatherUseCase: GetWeatherUseCase,
-    private val getTasksUseCase: GetTasksUseCase
+    private val getTasksUseCase: GetTasksUseCase,
+    private val getParcelsUseCase: GetParcelsUseCase
 ) : ViewModel() {
 
     private val _weatherInfo = MutableStateFlow<Weather?>(null)
@@ -22,10 +25,14 @@ class MainViewModel(
     private val _Tasks = MutableStateFlow<List<Task>>(emptyList())
     val Tasks: StateFlow<List<Task>> = _Tasks.asStateFlow()
 
+    private val _parcels = MutableStateFlow<List<Parcel>>(emptyList())
+    val parcels: StateFlow<List<Parcel>> = _parcels.asStateFlow()
+
     init {
         viewModelScope.launch {
             _weatherInfo.value = getWeatherUseCase()
             _Tasks.value = getTasksUseCase()
+            _parcels.value = getParcelsUseCase()
         }
     }
 }

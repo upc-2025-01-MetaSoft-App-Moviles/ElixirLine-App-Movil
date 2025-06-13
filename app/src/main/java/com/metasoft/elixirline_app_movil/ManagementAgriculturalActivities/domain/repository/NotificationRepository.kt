@@ -3,5 +3,6 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domai
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.TaskNotification
 
 interface NotificationRepository {
-    suspend fun getNotifications(): List<TaskNotification>
+    suspend fun getNotifications(taskId: String): List<TaskNotification>
 }
+

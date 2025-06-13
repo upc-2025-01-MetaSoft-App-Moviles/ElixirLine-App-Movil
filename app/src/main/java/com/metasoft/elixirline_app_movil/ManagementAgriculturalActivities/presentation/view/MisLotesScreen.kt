@@ -8,7 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,18 +19,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisLotesScreen(navController: NavController) {
     val darkRed = Color(0xFF8B0000)
 
-    val lotes = listOf(
-        LoteData(1, "Lote A", "Cabernet", "Cosecha", "Riego", "8 toneladas"),
-        LoteData(2, "Lote B", "Merlot", "Crecimiento", "Fertilización", "5 toneladas"),
-        LoteData(3, "Lote C", "Cabernet", "Siembra", "Preparación de suelo", "A determinar")
-    )
+    val factory = remember { MainViewModelFactory() }
+    val viewModel: MainViewModel = viewModel(factory = factory)
+
+    val lotes by viewModel.parcels.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -40,7 +44,11 @@ fun MisLotesScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = darkRed)
@@ -51,14 +59,17 @@ fun MisLotesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .background(Color(0xFF8B0000))
+                    .background(darkRed)
             )
         },
         floatingActionButton = {
             Button(
                 onClick = { navController.navigate("nuevoLote") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2F8FF)),
-                border = ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = androidx.compose.ui.graphics.SolidColor(darkRed)),
+                border = ButtonDefaults.outlinedButtonBorder.copy(
+                    width = 2.dp,
+                    brush = SolidColor(darkRed)
+                ),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -76,75 +87,67 @@ fun MisLotesScreen(navController: NavController) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            lotes.forEach { lote ->
-                Card(
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFD9D9D9)),
-                    border = ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = SolidColor(Color(0xFF8B0000))),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 12.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = "Lote ${lote.id} - ${lote.nombre}",
-                            color = Color.Black,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Variedad: ")
-                                }
-                                append(lote.variedad)
-                            },
-                            color = Color.Black
-                        )
-
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Etapa: ")
-                                }
-                                append(lote.etapa)
-                            },
-                            color = Color.Black
-                        )
-
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Últ. Task: ")
-                                }
-                                append(lote.ultimaTask)
-                            },
-                            color = Color.Black
-                        )
-
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("Rendimiento estimado: ")
-                                }
-                                append(lote.rendimiento)
-                            },
-                            color = Color.Black
-                        )
-
+            if (lotes.isNotEmpty()) {
+                lotes.forEachIndexed { index, lote ->
+                    Card(
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD9D9D9)),
+                        border = ButtonDefaults.outlinedButtonBorder.copy(
+                            width = 2.dp,
+                            brush = SolidColor(Color(0xFF8B0000))
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Lote ${index + 1} - ${lote.name}",
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append("Variedad: ")
+                                    }
+                                    append(lote.cropType)
+                                },
+                                color = Color.Black
+                            )
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append("Etapa: ")
+                                    }
+                                    append(lote.growthStage)
+                                },
+                                color = Color.Black
+                            )
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append("Últ. actividad: ")
+                                    }
+                                    append(lote.lastTask)
+                                },
+                                color = Color.Black
+                            )
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                        append("Rendimiento estimado: ")
+                                    }
+                                    append(lote.yieldEstimate)
+                                },
+                                color = Color.Black
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
-
-data class LoteData(
-    val id: Int,
-    val nombre: String,
-    val variedad: String,
-    val etapa: String,
-    val ultimaTask: String,
-    val rendimiento: String
-)

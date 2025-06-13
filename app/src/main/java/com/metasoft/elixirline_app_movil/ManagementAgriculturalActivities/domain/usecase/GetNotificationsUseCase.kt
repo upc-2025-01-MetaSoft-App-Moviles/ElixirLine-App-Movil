@@ -4,5 +4,8 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.NotificationRepository
 
 class GetNotificationsUseCase(private val repository: NotificationRepository) {
-    suspend operator fun invoke(): List<TaskNotification> = repository.getNotifications()
+    suspend operator fun invoke(taskId: String): List<TaskNotification> {
+        return repository.getNotifications(taskId)
+    }
 }
+

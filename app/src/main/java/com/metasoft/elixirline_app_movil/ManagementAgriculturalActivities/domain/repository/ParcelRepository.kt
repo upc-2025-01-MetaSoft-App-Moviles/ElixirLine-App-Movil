@@ -4,4 +4,5 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 
 interface ParcelRepository {
     suspend fun getParcels(): List<Parcel>
+    suspend fun addParcel(parcel: Parcel)
 }

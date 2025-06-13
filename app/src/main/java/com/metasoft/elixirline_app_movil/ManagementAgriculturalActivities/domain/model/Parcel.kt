@@ -1,9 +1,11 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model
 
 data class Parcel(
-    val parcelId: String,
-    val name: String?,
-    val area: Double,
-    val cropType: String?,
-    val location: String?
+    val id: String,
+    val name: String,
+    val cropType: String,
+    val growthStage: String,
+    val lastTask: String,
+    val yieldEstimate: String
 )
+

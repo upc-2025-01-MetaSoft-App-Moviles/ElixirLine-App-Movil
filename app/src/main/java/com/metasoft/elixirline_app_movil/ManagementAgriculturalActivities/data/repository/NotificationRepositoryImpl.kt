@@ -5,8 +5,9 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.NotificationRepository
 
 class NotificationRepositoryImpl(private val api: ApiService) : NotificationRepository {
-    override suspend fun getNotifications(): List<TaskNotification> {
-        return api.getNotifications().map { TaskNotification(
+    override suspend fun getNotifications(taskId: String): List<TaskNotification> {
+        return api.getNotifications(taskId).map {
+            TaskNotification(
                 notificationId = it.notificationId,
                 recipientId = it.recipientId,
                 taskId = it.taskId,

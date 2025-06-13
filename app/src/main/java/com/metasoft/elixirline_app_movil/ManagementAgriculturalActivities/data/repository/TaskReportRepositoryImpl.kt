@@ -6,8 +6,8 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.TaskReportRepository
 
 class TaskReportRepositoryImpl(private val api: ApiService) : TaskReportRepository {
-    override suspend fun getReports(): List<TaskExecutionReport> {
-        return api.getReports().map { reportDto ->
+    override suspend fun getReports(taskId: String): List<TaskExecutionReport> {
+        return api.getReports(taskId).map { reportDto ->
             TaskExecutionReport(
                 reportId = reportDto.reportId,
                 taskId = reportDto.taskId,

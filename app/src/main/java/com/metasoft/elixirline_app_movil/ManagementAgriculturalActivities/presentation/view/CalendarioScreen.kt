@@ -63,7 +63,7 @@ fun CalendarioScreen(navController: NavController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Calendario de Taskes", color = Color.White, fontSize = 20.sp)
+                    Text("Calendario de Actividades", color = Color.White, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -93,7 +93,7 @@ fun CalendarioScreen(navController: NavController) {
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text("Agregar Nueva Task", color = darkRed)
+                Text("Agregar Nueva actividad", color = darkRed)
             }
         }
     ) { innerPadding ->

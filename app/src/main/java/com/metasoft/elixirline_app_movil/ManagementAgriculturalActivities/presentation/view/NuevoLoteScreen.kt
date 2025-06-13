@@ -19,9 +19,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import java.util.*
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.*
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModelFactory
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +34,9 @@ fun NuevoLoteScreen(navController: NavHostController) {
     val darkRed = Color(0xFF8B0000)
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+
+    val factory = remember { NuevoLoteViewModelFactory(FakeApiService()) }
+    val viewModel: NuevoLoteViewModel = viewModel(factory = factory)
 
     var nombreLote by remember { mutableStateOf("") }
     var variedad by remember { mutableStateOf("") }
@@ -54,7 +62,7 @@ fun NuevoLoteScreen(navController: NavHostController) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF8B0000))
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = darkRed)
             )
         },
         bottomBar = {
@@ -62,7 +70,7 @@ fun NuevoLoteScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .background(Color(0xFF8B0000))
+                    .background(darkRed)
             )
         },
         containerColor = Color(0xFFF2F8FF)
@@ -137,7 +145,19 @@ fun NuevoLoteScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* Lógica para guardar */ },
+                onClick = {
+                    val nuevoLote = Parcel(
+                        id = UUID.randomUUID().toString(),
+                        name = nombreLote,
+                        cropType = variedad,
+                        growthStage = etapa,
+                        lastTask = "Sin actividad aún",
+                        yieldEstimate = "Sin estimar"
+                    )
+                    viewModel.saveParcel(nuevoLote) {
+                        navController.popBackStack()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = darkRed),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -168,4 +188,3 @@ fun CampoTexto(valor: String, onValueChange: (String) -> Unit) {
         modifier = Modifier.fillMaxWidth()
     )
 }
-

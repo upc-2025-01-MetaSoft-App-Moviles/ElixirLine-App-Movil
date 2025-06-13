@@ -25,8 +25,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
+import java.time.Instant
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -35,7 +38,7 @@ fun MainScreen(navController: NavController) {
     val viewModel: MainViewModel = viewModel(factory = factory)
 
     val weather by viewModel.weatherInfo.collectAsStateWithLifecycle()
-    val Tasks by viewModel.Tasks.collectAsStateWithLifecycle()
+    val tasks by viewModel.Tasks.collectAsStateWithLifecycle()
 
     val darkRed = Color(0xFF8B0000)
     val fondo = Color(0xFFF2F8FF)
@@ -65,7 +68,7 @@ fun MainScreen(navController: NavController) {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Taskes Agrícolas",
+                    text = "Actividades Agrícolas",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
@@ -86,7 +89,6 @@ fun MainScreen(navController: NavController) {
                         },
                         color = Color.Black
                     )
-
                     Text(
                         buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -101,21 +103,21 @@ fun MainScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            InfoCard(title = "Próximas Tasks agendadas") {
-                if (Tasks.isNotEmpty()) {
-                    Tasks.forEach {
+            InfoCard(title = "Próximas actividades agendadas") {
+                if (tasks.isNotEmpty()) {
+                    tasks.forEach {
                         Text(
                             buildAnnotatedString {
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                     append("${formatDateTime(it.scheduledDate)}: ")
                                 }
-                                append(it.description)
+                                append(it.title)
                             },
                             color = Color.Black
                         )
                     }
                 } else {
-                    Text("No hay Tasks agendadas.", color = Color.Black)
+                    Text("No hay actividades agendadas.", color = Color.Black)
                 }
             }
 
@@ -142,7 +144,7 @@ fun MainScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     QuickAccessButton(
-                        text = "Nueva Task",
+                        text = "Nueva actividad",
                         modifier = Modifier.weight(1f).defaultMinSize(minWidth = 140.dp)
                     ) { navController.navigate("nuevaTask") }
 
@@ -201,13 +203,9 @@ fun QuickAccessButton(text: String, modifier: Modifier = Modifier, onClick: () -
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun formatDateTime(isoDateTime: String): String {
-    return try {
-        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val dateTime = OffsetDateTime.parse(isoDateTime, formatter)
-        val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy – HH:mm")
-        outputFormatter.format(dateTime)
-    } catch (e: Exception) {
-        "Fecha inválida"
-    }
+fun formatDateTime(isoDate: String): String {
+    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm").withLocale(Locale("es", "ES"))
+    val instant = Instant.parse(isoDate)
+    val zonedDateTime = instant.atZone(ZoneId.systemDefault())
+    return formatter.format(zonedDateTime)
 }
