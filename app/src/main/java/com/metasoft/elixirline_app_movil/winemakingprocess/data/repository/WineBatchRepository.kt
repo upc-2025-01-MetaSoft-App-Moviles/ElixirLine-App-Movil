@@ -1,5 +1,6 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.data.repository
 
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.ReceptionStageResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.service.WineBatchService
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,19 @@ class WineBatchRepository(val wineBatchService: WineBatchService) {
 
         // If the response is not successful, return an empty list
         return@withContext emptyList()
+    }
+
+    suspend fun getReceptionStageByBatchId(batchId: Int): ReceptionStageResponse? = withContext(Dispatchers.IO) {
+        // Call the API to get the ReceptionStage by batchId
+        val response = wineBatchService.getReceptionStageByBatchId(batchId)
+
+        if (response.isSuccessful) {
+            // If successful, return the ReceptionStage
+            response.body()
+        } else {
+            // If the response is not successful, return null
+            null
+        }
     }
 
 
