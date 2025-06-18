@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchDetailView
 import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchesListView
 import kotlinx.coroutines.launch
 
@@ -42,7 +44,7 @@ import kotlinx.coroutines.launch
 fun Home() {
     val navController = rememberNavController()
 
-    val selectedWineBatch = remember { mutableStateOf<String?>(null) }
+    val selectedWineBatch = remember { mutableStateOf<WineBatchResponse?>(null) }
     val selectedIndex = remember { mutableStateOf(0) }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -146,7 +148,7 @@ fun Home() {
                 }
             },
 
-        ) { padding ->
+            ) { padding ->
             NavHost(
                 navController = navController,
                 startDestination = "WineBatches",
@@ -162,19 +164,32 @@ fun Home() {
                         onAdd = {
                             navController.navigate("WineBatchesAdd")
                         },
-                        onStageClick = { wineBatchId ->
-                            selectedWineBatch.value = wineBatchId.toString()
-                            navController.navigate("WineBatchesStage/$wineBatchId")
+                        onClick = {
+                            //Al seleccionar un lote, se guarda el lote seleccionado
+                            wineBatch ->
+                            selectedWineBatch.value = wineBatch
+                            navController.navigate("WineBatchDetail/${wineBatch.id}")
                         },
-                        onEditClick = { wineBatchId ->
-                            selectedWineBatch.value = wineBatchId.toString()
-                            navController.navigate("WineBatchesEdit/$wineBatchId")
+                        onEditClick = { wineBatch ->
+                            selectedWineBatch.value = wineBatch
+                            navController.navigate("WineBatchesEdit/${wineBatch.id}")
+                        }
+                    )
+                }
+                composable("WineBatchDetail/{wineBatchId}"){
+                    WineBatchDetailView(
+                        onBack = {
+                            navController.navigate("WineBatches") {
+                                popUpTo("WineBatches") { inclusive = true }
+                            }
                         },
-                        onInfoClick = { wineBatchId ->
-                            selectedWineBatch.value = wineBatchId.toString()
-                            navController.navigate("WineBatchesInfo/$wineBatchId")
+                        onAddStageClick = {
+                            navController.navigate("WineBatchStageAdd/${it.arguments?.getString("wineBatchId") ?: ""}")
+                            // Pasar el ID del lote seleccionado al agregar una nueva etapa
                         },
-                        )
+                        batchId = it.arguments?.getString("wineBatchId") ?: "",
+                    )
+
                 }
 
             }

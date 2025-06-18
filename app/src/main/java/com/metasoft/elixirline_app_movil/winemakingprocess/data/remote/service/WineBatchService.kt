@@ -11,6 +11,7 @@ import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface WineBatchService {
 
@@ -25,28 +26,37 @@ interface WineBatchService {
     @GET("wine_batches")
     suspend fun getWineBatches(): Response<List<WineBatchResponse>>
 
-   @GET("stages/{batchId}/receptionStage")
-    suspend fun getReceptionStageByBatchId(batchId: Int): Response<ReceptionStageResponse>
+    /**
+     * Fetches a specific wine batch by its ID.
+     *
+     * @param batchId The ID of the wine batch to fetch.
+     * @return A [WineBatchResponse] object representing the wine batch, or null if not found.
+     */
+    @GET("wine_batches/{batchId}")
+    suspend fun getWineBatchById(@Path("batchId") batchId: String): Response<WineBatchResponse>
 
-    @GET("stages/{batchId}/correctionStage")
-    suspend fun getCorrectionStageByBatchId(batchId: Int): Response<CorrectionStageResponse>
+   @GET("stages/{batchId}/receptionStage")
+    suspend fun getReceptionStageByBatchId(@Path("batchId") batchId: String): Response<ReceptionStageResponse>
+
+    @GET("batches/{batchId}/stages/correction")
+    suspend fun getCorrectionStageByBatchId(@Path("batchId") batchId: String): Response<CorrectionStageResponse>
 
     @GET("stages/{batchId}/fermentationStage")
-    suspend fun getFermentationStageByBatchId(batchId: Int): Response<FermentationStageResponse>
+    suspend fun getFermentationStageByBatchId(@Path("batchId") batchId: String): Response<FermentationStageResponse>
 
     @GET("stages/{batchId}/pressingStage")
-    suspend fun getPressingStageByBatchId(batchId: Int): Response<PressingStageResponse>
+    suspend fun getPressingStageByBatchId(@Path("batchId") batchId: String): Response<PressingStageResponse>
 
     @GET("stages/{batchId}/clarificationStage")
-    suspend fun getClarificationStageByBatchId(batchId: Int): Response<ClarificationStageResponse>
+    suspend fun getClarificationStageByBatchId(@Path("batchId") batchId: String): Response<ClarificationStageResponse>
 
     @GET("stages/{batchId}/agingStage")
-    suspend fun getAgingStageByBatchId(batchId: Int): Response<AgingStageResponse>
+    suspend fun getAgingStageByBatchId(@Path("batchId") batchId: String): Response<AgingStageResponse>
 
     @GET("stages/{batchId}/filtrationStage")
-    suspend fun getFiltrationStageByBatchId(batchId: Int): Response<FiltrationStageResponse>
+    suspend fun getFiltrationStageByBatchId(@Path("batchId") batchId: String): Response<FiltrationStageResponse>
 
     @GET("stages/{batchId}/bottlingStage")
-    suspend fun getBottlingStageByBatchId(batchId: Int): Response<BottlingStageResponse>
+    suspend fun getBottlingStageByBatchId(@Path("batchId") batchId: String): Response<BottlingStageResponse>
 
 }
