@@ -1,6 +1,5 @@
 package com.metasoft.elixirline_app_movil.ProductionHistory.data.model
 
-import com.metasoft.elixirline_app_movil.ProductionHistory.domain.model.QualityMetrics
 import java.util.UUID
 
 data class ProductionHistoryResponse(

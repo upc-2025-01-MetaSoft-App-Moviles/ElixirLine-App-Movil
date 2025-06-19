@@ -6,7 +6,6 @@ import java.util.UUID
 
 object ProductionHistoryMapper {
     fun toProductionHistory(productionHistoryResponse: ProductionHistoryResponse): ProductionHistory {
-        // Crear objeto QualityMetrics a partir de los campos individuales
         val qualityMetrics = QualityMetrics(
             Brix = productionHistoryResponse.brix ?: 0f,
             Ph = productionHistoryResponse.ph ?: 0f,
