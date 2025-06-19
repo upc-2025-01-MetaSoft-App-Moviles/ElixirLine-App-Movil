@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.metasoft.elixirline_app_movil.R
 import com.metasoft.elixirline_app_movil.ProductionHistory.data.di.DataModule
 import com.metasoft.elixirline_app_movil.ProductionHistory.data.remote.ApiConstants
-import com.metasoft.elixirline_app_movil.ProductionHistory.model.ProductionHistory
+import com.metasoft.elixirline_app_movil.ProductionHistory.domain.model.ProductionHistory
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -167,17 +167,32 @@ fun ProductionHistoryCard(productionHistory: ProductionHistory) {
 
             Text(text = "Volumen producido: ${productionHistory.volumeProduced}")
 
-            if (productionHistory.qualityMetrics.isNotEmpty()) {
+            // En lugar de iterar sobre el mapa:
+            if (productionHistory.qualityMetrics != null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Métricas de calidad:", fontWeight = FontWeight.Bold)
 
-                productionHistory.qualityMetrics.forEach { (key, value) ->
+                with(productionHistory.qualityMetrics) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = key)
-                        Text(text = "$value")
+                        Text(text = "Brix")
+                        Text(text = "$Brix")
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "pH")
+                        Text(text = "$Ph")
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Temperatura")
+                        Text(text = "$Temperature")
                     }
                 }
             }
