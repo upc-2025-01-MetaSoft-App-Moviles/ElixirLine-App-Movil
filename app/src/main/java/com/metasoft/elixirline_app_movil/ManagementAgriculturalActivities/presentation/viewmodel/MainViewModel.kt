@@ -2,9 +2,11 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.ParcelDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Weather
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.ParcelRepository
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetParcelsUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetWeatherUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetTasksUseCase
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val getWeatherUseCase: GetWeatherUseCase,
     private val getTasksUseCase: GetTasksUseCase,
-    private val getParcelsUseCase: GetParcelsUseCase
+    private val getParcelsUseCase: GetParcelsUseCase,
+    private val parcelRepository: ParcelRepository
 ) : ViewModel() {
 
     private val _weatherInfo = MutableStateFlow<Weather?>(null)
@@ -29,10 +32,35 @@ class MainViewModel(
     val parcels: StateFlow<List<Parcel>> = _parcels.asStateFlow()
 
     init {
+        loadAllData()
+    }
+
+    private fun loadAllData() {
         viewModelScope.launch {
             _weatherInfo.value = getWeatherUseCase()
             _Tasks.value = getTasksUseCase()
             _parcels.value = getParcelsUseCase()
         }
     }
+
+    fun loadParcels() {
+        viewModelScope.launch {
+            val newParcels = getParcelsUseCase()
+            println("loadParcels() llamado. Nuevos lotes: $newParcels")
+            _parcels.value = newParcels
+        }
+    }
+
+
+    fun addParcel(parcel: Parcel, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            println("[ViewModel] Llamando a addParcel con: $parcel")
+            parcelRepository.addParcel(parcel)
+            val updatedParcels = parcelRepository.getParcels()
+            println("[ViewModel] Parcels actualizados desde repository: $updatedParcels")
+            _parcels.value = updatedParcels
+            onComplete()
+        }
+    }
+
 }

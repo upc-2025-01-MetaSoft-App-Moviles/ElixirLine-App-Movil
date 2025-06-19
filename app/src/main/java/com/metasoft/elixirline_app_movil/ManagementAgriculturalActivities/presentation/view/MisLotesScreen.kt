@@ -35,6 +35,18 @@ fun MisLotesScreen(navController: NavController) {
     val viewModel: MainViewModel = viewModel(factory = factory)
 
     val lotes by viewModel.parcels.collectAsStateWithLifecycle()
+    val shouldRefresh = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getStateFlow("shouldRefresh", false)
+        ?.collectAsState()
+
+    LaunchedEffect(shouldRefresh?.value) {
+        println("shouldRefresh.value = ${shouldRefresh?.value}")
+        if (shouldRefresh?.value == true) {
+            viewModel.loadParcels()
+            navController.currentBackStackEntry?.savedStateHandle?.set("shouldRefresh", false)
+        }
+    }
 
     Scaffold(
         topBar = {

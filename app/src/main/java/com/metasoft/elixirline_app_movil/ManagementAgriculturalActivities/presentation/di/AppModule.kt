@@ -17,8 +17,10 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 @Module
 object AppModule {
 
+    private val fakeApiService = FakeApiService()
+
     @Provides
-    fun provideApiService(): ApiService = FakeApiService()
+    fun provideApiService(): ApiService = fakeApiService
 
     @Provides
     fun provideParcelRepository(api: ApiService): ParcelRepository = ParcelRepositoryImpl(api)

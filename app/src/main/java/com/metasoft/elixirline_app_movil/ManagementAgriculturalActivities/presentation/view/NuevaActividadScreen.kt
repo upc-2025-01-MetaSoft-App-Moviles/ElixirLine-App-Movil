@@ -1,28 +1,32 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view
 
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.*
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.TaskRepositoryImpl
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +34,7 @@ fun NuevaTaskScreen(navController: NavController) {
     val darkRed = Color(0xFF8B0000)
     val backgroundColor = Color(0xFFF2F8FF)
     val context = LocalContext.current
+    val taskRepository = TaskRepositoryImpl(FakeApiService())
 
     var tipoTask by remember { mutableStateOf("") }
     val opcionesTask = listOf("Riego", "Fertilización", "Cosecha", "Poda")
@@ -158,6 +163,21 @@ fun NuevaTaskScreen(navController: NavController) {
 
             Button(
                 onClick = {
+                    val nuevaTask = Task(
+                        id = UUID.randomUUID().toString(),
+                        title = tipoTask,
+                        description = notas,
+                        scheduledDate = fecha
+                    )
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        taskRepository.addTask(nuevaTask)
+
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(context, "Actividad guardada", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack()
+                        }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = darkRed),
                 modifier = Modifier

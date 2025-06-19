@@ -2,6 +2,7 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -25,8 +26,12 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.r
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import java.util.*
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.*
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModelFactory
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModel
+import androidx.compose.runtime.livedata.observeAsState
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,8 +40,8 @@ fun NuevoLoteScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
-    val factory = remember { NuevoLoteViewModelFactory(FakeApiService()) }
-    val viewModel: NuevoLoteViewModel = viewModel(factory = factory)
+    val factory = remember { MainViewModelFactory() }
+    val viewModel: MainViewModel = viewModel(factory = factory)
 
     var nombreLote by remember { mutableStateOf("") }
     var variedad by remember { mutableStateOf("") }
@@ -50,6 +55,17 @@ fun NuevoLoteScreen(navController: NavHostController) {
     val variedades = listOf("Cabernet", "Merlot")
     val estados = listOf("Saludable", "Enfermo")
     val etapas = listOf("Siembra", "Crecimiento", "Cosecha")
+
+    val shouldRefresh = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Boolean>("shouldRefresh")?.observeAsState()
+
+    LaunchedEffect(shouldRefresh?.value) {
+        if (shouldRefresh?.value == true) {
+            viewModel.loadParcels()
+            navController.currentBackStackEntry?.savedStateHandle?.set("shouldRefresh", false)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -154,7 +170,17 @@ fun NuevoLoteScreen(navController: NavHostController) {
                         lastTask = "Sin actividad aún",
                         yieldEstimate = "Sin estimar"
                     )
-                    viewModel.saveParcel(nuevoLote) {
+                    viewModel.addParcel(nuevoLote) {
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("shouldRefresh", true)
+
+                        Toast.makeText(
+                            context,
+                            "Lote guardado",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         navController.popBackStack()
                     }
                 },
@@ -165,7 +191,6 @@ fun NuevoLoteScreen(navController: NavHostController) {
             ) {
                 Text("Guardar Lote", color = Color.White)
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

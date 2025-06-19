@@ -3,6 +3,6 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domai
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 
 interface ParcelRepository {
-    suspend fun getParcels(): List<Parcel>
     suspend fun addParcel(parcel: Parcel)
+    suspend fun getParcels(): List<Parcel>
 }

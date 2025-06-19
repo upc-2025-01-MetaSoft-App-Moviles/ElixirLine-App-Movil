@@ -4,4 +4,5 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 
 interface TaskRepository {
     suspend fun getTasks(): List<Task>
+    suspend fun addTask(task: Task)
 }

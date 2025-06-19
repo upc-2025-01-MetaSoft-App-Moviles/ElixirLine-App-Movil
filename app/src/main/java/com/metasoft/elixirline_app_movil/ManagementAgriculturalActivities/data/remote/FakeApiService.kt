@@ -1,26 +1,26 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote
 
+import com.google.android.datatransport.runtime.BuildConfig
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.EvidencePhotoDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskNotificationDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.ParcelDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskExecutionReportDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.WeatherDto
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 
 class FakeApiService : ApiService {
 
-    private val fakeParcels = mutableListOf(
-        ParcelDto("uuid-parcel-1", "Parcela Norte", 1.5, "Cabernet", "Valle Norte"),
-        ParcelDto("uuid-parcel-2", "Viña El Molino", 1.5, "Merlot", "Valle Central"),
-        ParcelDto("uuid-parcel-3", "Parcela Sur", 1.5, "Cabernet", "Valle Sur")
-    )
+    private val fakeParcels = mutableListOf<ParcelDto>()
 
     override suspend fun getParcels(): List<ParcelDto> {
         return fakeParcels
     }
 
     override suspend fun addParcel(parcel: ParcelDto): ParcelDto {
+        println("Se añadió un nuevo ParcelDto: $parcel")
         fakeParcels.add(parcel)
+        println("Lista actual de fakeParcels: $fakeParcels")
         return parcel
     }
 
@@ -46,19 +46,30 @@ class FakeApiService : ApiService {
         }
     }
 
-    override suspend fun getTasks(): List<TaskDto> {
-        return listOf(
-            TaskDto(
-                taskId = "uuid-task-1",
-                title = "Riego en lote A",
-                description = "Riego temprano",
-                parcelId = "uuid-parcel-1",
-                assignedTo = "uuid-user-1",
-                scheduledDate = "2025-06-13T08:00:00Z",
-                status = 0
-            )
+    private val fakeTasks = mutableListOf<TaskDto>(
+        TaskDto(
+            taskId = "uuid-task-1",
+            title = "Riego en lote A",
+            description = "Riego temprano",
+            parcelId = "uuid-parcel-1",
+            assignedTo = "uuid-user-1",
+            scheduledDate = "2025-06-13T08:00:00Z",
+            status = 0
         )
+    )
+
+    override suspend fun getTasks(): List<TaskDto> {
+        return fakeTasks
     }
+
+    override suspend fun createTask(task: TaskDto): TaskDto {
+        val newTask = task.copy(
+            taskId = task.taskId.ifEmpty { "uuid-task-${System.currentTimeMillis()}" }
+        )
+        fakeTasks.add(newTask)
+        return newTask
+    }
+
 
     override suspend fun getTaskById(taskId: String): TaskDto {
         return TaskDto(
@@ -69,12 +80,6 @@ class FakeApiService : ApiService {
             assignedTo = "uuid-user-1",
             scheduledDate = "2025-06-13T08:00:00Z",
             status = 0
-        )
-    }
-
-    override suspend fun createTask(task: TaskDto): TaskDto {
-        return task.copy(
-            taskId = task.taskId.ifEmpty { "uuid-task-${System.currentTimeMillis()}" }
         )
     }
 

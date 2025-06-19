@@ -5,6 +5,7 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.m
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskExecutionReportDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.WeatherDto
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import retrofit2.http.*
 
 interface ApiService {
@@ -75,5 +76,3 @@ interface ApiService {
     suspend fun deleteNotification(@Path("notificationId") notificationId: String)
 */
 }
-
-
