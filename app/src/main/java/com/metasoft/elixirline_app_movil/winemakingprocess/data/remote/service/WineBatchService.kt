@@ -8,10 +8,12 @@ import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.FiltrationStageResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.PressingStageResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.ReceptionStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.StagesResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface WineBatchService {
 
@@ -35,7 +37,16 @@ interface WineBatchService {
     @GET("wine_batches/{batchId}")
     suspend fun getWineBatchById(@Path("batchId") batchId: String): Response<WineBatchResponse>
 
-   @GET("stages/{batchId}/receptionStage")
+
+    @GET("stages")
+    suspend fun getAllStages(): Response<List<StagesResponse>>
+
+    @GET("stages")
+    suspend fun getStagesByBatchId(@Query("batchId") batchId: String): Response<List<StagesResponse>>
+
+
+
+    @GET("stages/{batchId}/receptionStage")
     suspend fun getReceptionStageByBatchId(@Path("batchId") batchId: String): Response<ReceptionStageResponse>
 
     @GET("batches/{batchId}/stages/correction")

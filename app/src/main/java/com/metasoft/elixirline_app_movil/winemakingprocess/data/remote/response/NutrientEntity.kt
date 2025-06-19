@@ -2,16 +2,17 @@ package com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-class NutrientEntity (
+data class NutrientEntity(
     @SerializedName("name")
-    val name: String,
-    @SerializedName("dose")
-    val dose: Double,
+    val name: String?,
+
+    @SerializedName("quantityMgL")
+    val quantityMgL: Double?,
+
     @SerializedName("unit")
-    val unit: String = "g/L"
+    val unit: String?
 ) {
-    // Override toString for better logging
     override fun toString(): String {
-        return "NutrientEntity(name='$name', dose=$dose)"
+        return "NutrientEntity(name=${name ?: "N/A"}, quantityMgL=${quantityMgL ?: 0.0}, unit=${unit ?: "N/A"})"
     }
 }

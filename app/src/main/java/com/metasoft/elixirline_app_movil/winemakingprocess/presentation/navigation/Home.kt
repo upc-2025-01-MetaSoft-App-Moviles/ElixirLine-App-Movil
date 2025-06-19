@@ -168,7 +168,7 @@ fun Home() {
                             //Al seleccionar un lote, se guarda el lote seleccionado
                             wineBatch ->
                             selectedWineBatch.value = wineBatch
-                            navController.navigate("WineBatchDetail/${wineBatch.id}")
+                            navController.navigate("WineBatchDetail")
                         },
                         onEditClick = { wineBatch ->
                             selectedWineBatch.value = wineBatch
@@ -176,7 +176,7 @@ fun Home() {
                         }
                     )
                 }
-                composable("WineBatchDetail/{wineBatchId}"){
+                composable("WineBatchDetail"){
                     WineBatchDetailView(
                         onBack = {
                             navController.navigate("WineBatches") {
@@ -187,7 +187,7 @@ fun Home() {
                             navController.navigate("WineBatchStageAdd/${it.arguments?.getString("wineBatchId") ?: ""}")
                             // Pasar el ID del lote seleccionado al agregar una nueva etapa
                         },
-                        batchId = it.arguments?.getString("wineBatchId") ?: "",
+                        batchId = selectedWineBatch.value?.id ?: "",
                     )
 
                 }

@@ -2,40 +2,57 @@ package com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-class BottlingStageResponse (
 
-    @SerializedName( "stage")
+data class BottlingStageResponse(
+
+    @SerializedName("stage")
     val stage: String?,
-    @SerializedName( "registeredBy")
+
+    @SerializedName("registeredBy")
     val registeredBy: String?,
-    @SerializedName( "startDate")
+
+    @SerializedName("startDate")
     val startDate: String?,
-    @SerializedName( "endDate")
+
+    @SerializedName("endDate")
     val endDate: String?,
-    @SerializedName( "bottlingLine")
-    val bottlingLine: String?, // Línea de embotellado
-    @SerializedName( "bottlesFilled")
-    val bottlesFilled: Int,               // Total de botellas llenadas
-    @SerializedName( "bottleVolumeMl")
-    val bottleVolumeMl: Int,             // Volumen por botella
-    @SerializedName( "totalVolumeLiters")
-    val totalVolumeLiters: Double,       // Volumen total embotellado
-    @SerializedName( "sealType")
-    val sealType: String?,                         // Tipo de sellado (ej. 'Corcho natural')
-    @SerializedName( "code")
-    val code: String?,                                 // Código identificador del lote embotellado
-    @SerializedName( "temperature")
-    val temperature: Double?,                   // Temperatura durante embotellado
-    @SerializedName( "wasFiltered")
-    val wasFiltered: Boolean = false,
-    @SerializedName( "wereLabelsApplied")
-    val wereLabelsApplied: Boolean = false,
-    @SerializedName( "wereCapsulesApplied")
-    val wereCapsulesApplied: Boolean = false,
-    @SerializedName( "comments")
-    val comments: String,
-    @SerializedName( "isCompleted")
-    val isCompleted: Boolean = false
+
+    @SerializedName("bottlingLine")
+    val bottlingLine: String?,
+
+    @SerializedName("bottlesFilled")
+    val bottlesFilled: Int?,
+
+    @SerializedName("bottleVolumeMl")
+    val bottleVolumeMl: Int?,
+
+    @SerializedName("totalVolumeLiters")
+    val totalVolumeLiters: Double?,
+
+    @SerializedName("sealType")
+    val sealType: String?,
+
+    @SerializedName("code")
+    val code: String?,
+
+    @SerializedName("temperature")
+    val temperature: Double?,
+
+    @SerializedName("wasFiltered")
+    val wasFiltered: Boolean?,
+
+    @SerializedName("wereLabelsApplied")
+    val wereLabelsApplied: Boolean?,
+
+    @SerializedName("wereCapsulesApplied")
+    val wereCapsulesApplied: Boolean?,
+
+    @SerializedName("comments")
+    val comments: String?,
+
+    @SerializedName("isCompleted")
+    val isCompleted: Boolean?
 )
+
 
 

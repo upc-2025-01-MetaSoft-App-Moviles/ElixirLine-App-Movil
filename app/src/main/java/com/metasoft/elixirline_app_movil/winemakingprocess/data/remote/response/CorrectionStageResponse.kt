@@ -2,58 +2,54 @@ package com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-/*
-stage = null,
-registeredBy = null,
-startDate = null,
-endDate = null,
-initialBrix = null,
-finalBrix = null,
-addedSugarKg = null,
-initialPH = null,
-finalPH = null,
-acidType = null,
-acidAddedGL = null,
-SO2AddedMgL = null,
-nutrientsAdded = null,
-justification = null,
-comments = null,
-isCompleted = false
-*/
 
-class CorrectionStageResponse (
+data class CorrectionStageResponse(
 
     @SerializedName("stage")
-    val stage: String,
+    val stage: String?,
+
     @SerializedName("registeredBy")
-    val registeredBy: String,
+    val registeredBy: String?,
+
     @SerializedName("startDate")
-    val startDate: String,
+    val startDate: String?,
+
     @SerializedName("endDate")
-    val endDate: String,
+    val endDate: String?,
+
     @SerializedName("initialBrix")
     val initialBrix: Double?,
+
     @SerializedName("finalBrix")
     val finalBrix: Double?,
+
     @SerializedName("addedSugarKg")
     val addedSugarKg: Double?,
+
     @SerializedName("initialPH")
     val initialPH: Double?,
+
     @SerializedName("finalPH")
     val finalPH: Double?,
+
     @SerializedName("acidType")
     val acidType: String?,
+
     @SerializedName("acidAddedGL")
     val acidAddedGL: Double?,
+
     @SerializedName("SO2AddedMgL")
-    val SO2AddedMgL: Double?,
+    val SO2AddedMgL: Int?,
+
     @SerializedName("nutrientsAdded")
     val nutrientsAdded: List<NutrientEntity>?,
+
     @SerializedName("justification")
     val justification: String?,
+
     @SerializedName("comments")
     val comments: String?,
-    @SerializedName("isCompleted")
-    val isCompleted: Boolean
 
+    @SerializedName("isCompleted")
+    val isCompleted: Boolean?
 )

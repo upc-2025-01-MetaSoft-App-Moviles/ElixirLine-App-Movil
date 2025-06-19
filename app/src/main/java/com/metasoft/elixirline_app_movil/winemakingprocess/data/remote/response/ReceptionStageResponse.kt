@@ -7,27 +7,42 @@ import com.google.gson.annotations.SerializedName
  * Esta clase contiene información detallada sobre el prensado, incluyendo tipo de prensa,
  * presión, duración, rendimiento y otros detalles relevantes.
  */
-class ReceptionStageResponse(
+
+/*
+"receptionStage": {
+    "stage": "Recepción",
+    "registeredBy": "Danni Vargas",
+    "startDate": "2025-05-10",
+    "endDate": "2025-05-10",
+    "sugarLevelBrix": 21.3,
+    "pH": 3.28,
+    "temperature": 18.7,
+    "quantityKg": 1248.4,
+    "comments": "Uvas frescas, sin signos de podredumbre.",
+    "isCompleted": true
+    }
+ */
+
+data class ReceptionStageResponse(
 
     @SerializedName("stage")
-    val stage: String?, // Siempre 'Recepción'
+    val stage: String?,
     @SerializedName("registeredBy")
-    val registeredBy: String?, // Usuario que registra la etapa
+    val registeredBy: String?,
     @SerializedName("startDate")
-    val startDate: String?, // Fecha de inicio de la etapa
+    val startDate: String?,
     @SerializedName("endDate")
-    val endDate: String?, // Fecha de finalización de la etapa
+    val endDate: String?,
     @SerializedName("sugarLevelBrix")
-    val sugarLevelBrix: Double?, // Nivel de azúcar en Brix
+    val sugarLevelBrix: Double?,
     @SerializedName("pH")
-    val pH: Double?, // pH del mosto
+    val pH: Double?,
     @SerializedName("temperature")
-    val temperature: Double?, // Temperatura del mosto
+    val temperature: Double?,
     @SerializedName("quantityKg")
-    val quantityKg: Double?, // Cantidad de uvas en kg
+    val quantityKg: Double?,
     @SerializedName("comments")
-    val comments: String?, // Comentarios adicionales
+    val comments: String?,
     @SerializedName("isCompleted")
-    val isCompleted: Boolean // Indica si la etapa está completa
-
+    val isCompleted: Boolean?,
 )

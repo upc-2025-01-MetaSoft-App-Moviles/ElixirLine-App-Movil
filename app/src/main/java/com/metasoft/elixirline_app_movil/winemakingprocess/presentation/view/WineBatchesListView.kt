@@ -1,5 +1,6 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +56,9 @@ fun WineBatchesListView(
 
     // Estado para los lotes de vino
     val wineBatches = wineBatchesListViewModel.wineBatches.collectAsState()
+
+    Log.d("WineBatchDetail", "===========: $wineBatches")
+
 
     // Estado para la barra de búsqueda
     val searchQuery = remember { mutableStateOf("") }

@@ -10,6 +10,7 @@ import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.FiltrationStageResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.PressingStageResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.ReceptionStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.StagesResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.repository.WineBatchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,19 @@ import kotlinx.coroutines.launch
 class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository): ViewModel() {
 
 
-    // receptionStage =================================================================
+    // Todas las etapas por lote de vino ============================================================
+
+    private val _stagesByBatchId = MutableStateFlow<List<StagesResponse>>(emptyList())
+    val stagesByBatchId: StateFlow<List<StagesResponse>> = _stagesByBatchId
+
+    fun getStagesByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _stagesByBatchId.value = wineBatchRepository.getStagesByBatchId(batchId)
+        }
+    }
+
+    // Etapas individuales ============================================================
+
     private val _receptionStage = MutableStateFlow<ReceptionStageResponse?>(null)
     val receptionStage: StateFlow<ReceptionStageResponse?> = _receptionStage
 
@@ -28,7 +41,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // correctionStage ================================================================
     private val _correctionStage = MutableStateFlow<CorrectionStageResponse?>(null)
     val correctionStage: StateFlow<CorrectionStageResponse?> = _correctionStage
 
@@ -38,7 +50,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // fermentationStage ==============================================================
     private val _fermentationStage = MutableStateFlow<FermentationStageResponse?>(null)
     val fermentationStage: StateFlow<FermentationStageResponse?> = _fermentationStage
 
@@ -48,7 +59,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // pressingStage ==================================================================
     private val _pressingStage = MutableStateFlow<PressingStageResponse?>(null)
     val pressingStage: StateFlow<PressingStageResponse?> = _pressingStage
 
@@ -58,7 +68,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // clarificationStage ==============================================================
     private val _clarificationStage = MutableStateFlow<ClarificationStageResponse?>(null)
     val clarificationStage: StateFlow<ClarificationStageResponse?> = _clarificationStage
 
@@ -68,7 +77,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // agingStage ==================================================================
     private val _agingStage = MutableStateFlow<AgingStageResponse?>(null)
     val agingStage: StateFlow<AgingStageResponse?> = _agingStage
 
@@ -78,7 +86,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // FiltrationStage ==================================================================
     private val _filtrationStage = MutableStateFlow<FiltrationStageResponse?>(null)
     val filtrationStage: StateFlow<FiltrationStageResponse?> = _filtrationStage
 
@@ -88,7 +95,6 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
         }
     }
 
-    // BottlingStage ==================================================================
     private val _bottlingStage = MutableStateFlow<BottlingStageResponse?>(null)
     val bottlingStage: StateFlow<BottlingStageResponse?> = _bottlingStage
 
@@ -97,6 +103,8 @@ class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository):
             _bottlingStage.value = wineBatchRepository.getBottlingStageByBatchId(batchId)
         }
     }
-
 }
+
+
+
 
