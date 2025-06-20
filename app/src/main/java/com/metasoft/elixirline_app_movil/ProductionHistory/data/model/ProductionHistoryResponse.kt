@@ -8,5 +8,7 @@ data class ProductionHistoryResponse(
     val startDate: String?,
     val endDate: String?,
     val volumeProduced: Float?,
-    val qualityMetrics: Map<String, Float>?
+    val brix: Float?,
+    val ph: Float?,
+    val temperature: Float?
 )
