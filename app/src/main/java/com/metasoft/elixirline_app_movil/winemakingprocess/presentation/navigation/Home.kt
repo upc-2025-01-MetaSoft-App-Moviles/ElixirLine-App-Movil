@@ -1,4 +1,5 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.navigation
+import com.metasoft.elixirline_app_movil.ProductionHistory.presentation.view.FindAllProductionHistoryView
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -6,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Refresh
@@ -55,6 +57,7 @@ fun Home() {
         NavigationItem(Icons.Default.Create, "Gestion de Insumos", "Insumos"),
         NavigationItem(Icons.Default.Place, "Actividades Agricolas", "Agricolas"),
         NavigationItem(Icons.Default.AccountBox, "Gestion de Empleados", "Empleados"),
+        NavigationItem(Icons.Default.Info, "Historial de Producción", "ProductionHistory"),
     )
 
     ModalNavigationDrawer(
@@ -166,7 +169,7 @@ fun Home() {
                         },
                         onClick = {
                             //Al seleccionar un lote, se guarda el lote seleccionado
-                            wineBatch ->
+                                wineBatch ->
                             selectedWineBatch.value = wineBatch
                             navController.navigate("WineBatchDetail")
                         },
@@ -189,9 +192,12 @@ fun Home() {
                         },
                         batchId = remember { selectedWineBatch.value?.id ?: "" },
                     )
-
                 }
 
+                // Nueva ruta para el Historial de Producción
+                composable("ProductionHistory") {
+                    FindAllProductionHistoryView()
+                }
             }
         }
     }
