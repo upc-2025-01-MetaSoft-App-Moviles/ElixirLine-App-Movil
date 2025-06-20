@@ -22,16 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.TaskRepositoryImpl
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
@@ -56,7 +50,6 @@ fun NuevaTaskScreen(navController: NavController) {
     val lotes by viewModel.parcels.collectAsStateWithLifecycle()
 
     var loteSeleccionado by remember { mutableStateOf<Parcel?>(null) }
-    val opcionesLote = lotes
 
     var fecha by remember { mutableStateOf("") }
     var hora by remember { mutableStateOf("") }

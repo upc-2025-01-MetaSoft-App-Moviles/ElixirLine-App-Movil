@@ -17,19 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import java.util.*
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.*
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModelFactory
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.NuevoLoteViewModel
 import androidx.compose.runtime.livedata.observeAsState
 
 

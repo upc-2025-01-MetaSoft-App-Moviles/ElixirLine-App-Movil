@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.ParcelDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Weather
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task

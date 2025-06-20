@@ -2,7 +2,6 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.ParcelRepositoryImpl
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.di.AppModule
 

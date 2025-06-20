@@ -1,13 +1,11 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote
 
-import com.google.android.datatransport.runtime.BuildConfig
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.EvidencePhotoDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskNotificationDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.ParcelDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskExecutionReportDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.TaskDto
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.WeatherDto
-import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 
 class FakeApiService : ApiService {
 

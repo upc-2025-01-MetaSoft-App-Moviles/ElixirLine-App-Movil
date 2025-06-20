@@ -67,7 +67,6 @@ fun CalendarioScreen(navController: NavController, viewModel: MainViewModel) {
 
     val tasksPorFecha = viewModel.getTasksPorFecha()
     val tasks = viewModel.Tasks.collectAsState().value
-    val parcels = viewModel.parcels.collectAsState().value
 
     val tasksPorFechaReal = tasks.groupBy {
         Instant.parse(it.scheduledDate)
