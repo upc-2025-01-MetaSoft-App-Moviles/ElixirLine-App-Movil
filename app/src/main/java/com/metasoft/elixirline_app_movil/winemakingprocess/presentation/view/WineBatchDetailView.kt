@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,19 +62,17 @@ fun WineBatchDetailView(
     batchId: String,
 ) {
 
+
     val wineBatch = wineBatchDetailViewModel.selectedBatch.collectAsState().value
     val stagesByBatchId = stagesByWineBatchViewModel.stagesByBatchId.collectAsState().value
 
-    // === Lanzar la carga solo una vez ===
-    LaunchedEffect(batchId) {
-        if (wineBatch == null || wineBatch.id != batchId) {
-            wineBatchDetailViewModel.getWineBatchById(batchId)
-        }
-        if (stagesByBatchId.isEmpty() || stagesByBatchId.firstOrNull()?.batchId != batchId) {
-            stagesByWineBatchViewModel.getStagesByBatchId(batchId)
-        }
-    }
 
+    if (wineBatch == null) {
+        wineBatchDetailViewModel.getWineBatchById(batchId)
+    }
+    if (stagesByBatchId.isEmpty()) {
+        stagesByWineBatchViewModel.getStagesByBatchId(batchId)
+    }
 
     // Log para depuración
     Log.d("WineBatchDetail", "Selected Batch: $wineBatch")
