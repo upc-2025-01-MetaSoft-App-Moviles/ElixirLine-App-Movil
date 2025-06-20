@@ -1,6 +1,8 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -46,9 +47,8 @@ fun WineBatchesListView(
     wineBatchesListViewModel: WineBatchesListViewModel = PresentationModuleWinemaking.getWineBatchesListViewModel(),
     onBack: () -> Unit,
     onAdd: () -> Unit,
-    onStageClick: (WineBatchResponse) -> Unit,
+    onClick: (WineBatchResponse) -> Unit,
     onEditClick: (WineBatchResponse) -> Unit,
-    onInfoClick: (WineBatchResponse) -> Unit,
 ) {
 
     // Obtener los lotes de vino
@@ -56,6 +56,9 @@ fun WineBatchesListView(
 
     // Estado para los lotes de vino
     val wineBatches = wineBatchesListViewModel.wineBatches.collectAsState()
+
+    Log.d("WineBatchDetail", "===========: $wineBatches")
+
 
     // Estado para la barra de búsqueda
     val searchQuery = remember { mutableStateOf("") }
@@ -112,9 +115,8 @@ fun WineBatchesListView(
                 }) { batch ->
                     WineBatchCard(
                         batch = batch,
-                        onStageClick = onStageClick,
+                        onClick = onClick,
                         onEditClick = onEditClick,
-                        onInfoClick = onInfoClick
                     )
                 }
             }
@@ -156,14 +158,14 @@ fun WineBatchesListView(
 @Composable
 fun WineBatchCard(
     batch: WineBatchResponse,
-    onStageClick: (WineBatchResponse) -> Unit,
+    onClick: (WineBatchResponse) -> Unit,
     onEditClick: (WineBatchResponse) -> Unit,
-    onInfoClick: (WineBatchResponse) -> Unit
 ) {
     Card(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(8.dp)
-            .fillMaxWidth(),
+            .clickable { onClick(batch) },
         border = BorderStroke(1.dp, Color(0xFF8B0000))
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -178,11 +180,8 @@ fun WineBatchCard(
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
             ) {
-                Button(onClick = { onStageClick(batch) }) { Text("Etapa") }
-                //Spacer(modifier = Modifier.width(8.dp)) // Espacio entre botones
                 OutlinedButton(onClick = { onEditClick(batch) }) { Text("Editar") }
-                //Spacer(modifier = Modifier.width(8.dp)) // Espacio entre botones
-                OutlinedButton(onClick = { onInfoClick(batch) }) { Text("Info") }
+
             }
         }
     }

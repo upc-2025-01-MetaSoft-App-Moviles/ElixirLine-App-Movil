@@ -2,7 +2,6 @@ package com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-
 data class WineBatchResponse(
 
     @SerializedName( "id")
@@ -27,6 +26,4 @@ data class WineBatchResponse(
     val currentStage: String,
     @SerializedName("url_image")
     val urlImage: String,
-
-    // Puedes incluir winemakingStages si el backend lo devuelve
 )

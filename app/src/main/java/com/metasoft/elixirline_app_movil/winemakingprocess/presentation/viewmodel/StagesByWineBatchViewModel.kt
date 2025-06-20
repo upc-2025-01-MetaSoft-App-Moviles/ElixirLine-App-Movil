@@ -1,0 +1,110 @@
+package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.AgingStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.BottlingStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.ClarificationStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.CorrectionStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.FermentationStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.FiltrationStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.PressingStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.ReceptionStageResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.StagesResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.repository.WineBatchRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+
+class StagesByWineBatchViewModel (val wineBatchRepository: WineBatchRepository): ViewModel() {
+
+
+    // Todas las etapas por lote de vino ============================================================
+
+    private val _stagesByBatchId = MutableStateFlow<List<StagesResponse>>(emptyList())
+    val stagesByBatchId: StateFlow<List<StagesResponse>> = _stagesByBatchId
+
+    fun getStagesByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _stagesByBatchId.value = wineBatchRepository.getStagesByBatchId(batchId)
+        }
+    }
+
+    // Etapas individuales ============================================================
+
+    private val _receptionStage = MutableStateFlow<ReceptionStageResponse?>(null)
+    val receptionStage: StateFlow<ReceptionStageResponse?> = _receptionStage
+
+    fun getReceptionStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _receptionStage.value = wineBatchRepository.getReceptionStageByBatchId(batchId)
+        }
+    }
+
+    private val _correctionStage = MutableStateFlow<CorrectionStageResponse?>(null)
+    val correctionStage: StateFlow<CorrectionStageResponse?> = _correctionStage
+
+    fun getCorrectionStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _correctionStage.value = wineBatchRepository.getCorrectionStageByBatchId(batchId)
+        }
+    }
+
+    private val _fermentationStage = MutableStateFlow<FermentationStageResponse?>(null)
+    val fermentationStage: StateFlow<FermentationStageResponse?> = _fermentationStage
+
+    fun getFermentationStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _fermentationStage.value = wineBatchRepository.getFermentationStageByBatchId(batchId)
+        }
+    }
+
+    private val _pressingStage = MutableStateFlow<PressingStageResponse?>(null)
+    val pressingStage: StateFlow<PressingStageResponse?> = _pressingStage
+
+    fun getPressingStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _pressingStage.value = wineBatchRepository.getPressingStageByBatchId(batchId)
+        }
+    }
+
+    private val _clarificationStage = MutableStateFlow<ClarificationStageResponse?>(null)
+    val clarificationStage: StateFlow<ClarificationStageResponse?> = _clarificationStage
+
+    fun getClarificationStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _clarificationStage.value = wineBatchRepository.getClarificationStageByBatchId(batchId)
+        }
+    }
+
+    private val _agingStage = MutableStateFlow<AgingStageResponse?>(null)
+    val agingStage: StateFlow<AgingStageResponse?> = _agingStage
+
+    fun getAgingStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _agingStage.value = wineBatchRepository.getAgingStageByBatchId(batchId)
+        }
+    }
+
+    private val _filtrationStage = MutableStateFlow<FiltrationStageResponse?>(null)
+    val filtrationStage: StateFlow<FiltrationStageResponse?> = _filtrationStage
+
+    fun getFiltrationStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _filtrationStage.value = wineBatchRepository.getFiltrationStageByBatchId(batchId)
+        }
+    }
+
+    private val _bottlingStage = MutableStateFlow<BottlingStageResponse?>(null)
+    val bottlingStage: StateFlow<BottlingStageResponse?> = _bottlingStage
+
+    fun getBottlingStageByBatchId(batchId: String) {
+        viewModelScope.launch {
+            _bottlingStage.value = wineBatchRepository.getBottlingStageByBatchId(batchId)
+        }
+    }
+}
+
+
+
+
