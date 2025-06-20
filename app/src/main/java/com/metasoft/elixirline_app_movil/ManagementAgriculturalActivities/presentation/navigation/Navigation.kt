@@ -22,6 +22,7 @@ fun NavigationGraph(
         composable("nuevaTask") { NuevaTaskScreen(navController) }
         composable("calendario") { CalendarioScreen(navController, viewModel) }
         composable("misLotes") { MisLotesScreen(navController) }
-        composable("nuevoLote") { NuevoLoteScreen(navController) }
+        composable("nuevoLote") { NuevoLoteScreen(navController, viewModel) }
+
     }
 }

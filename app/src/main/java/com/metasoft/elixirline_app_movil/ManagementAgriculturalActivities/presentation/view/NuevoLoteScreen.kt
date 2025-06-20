@@ -30,7 +30,7 @@ import androidx.compose.runtime.livedata.observeAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NuevoLoteScreen(navController: NavHostController) {
+fun NuevoLoteScreen(navController: NavHostController, viewModel: MainViewModel) {
     val darkRed = Color(0xFF8B0000)
     val scrollState = rememberScrollState()
     val context = LocalContext.current

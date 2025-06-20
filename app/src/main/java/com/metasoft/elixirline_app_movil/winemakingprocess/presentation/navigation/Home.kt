@@ -1,4 +1,6 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.navigation
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.metasoft.elixirline_app_movil.ProductionHistory.presentation.view.FindAllProductionHistoryView
 
 import androidx.compose.foundation.layout.Row
@@ -33,17 +35,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.CalendarioScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.MainScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.MisLotesScreen
 import com.metasoft.elixirline_app_movil.fieldlog.presentation.di.PresentationModule
 import com.metasoft.elixirline_app_movil.fieldlog.presentation.navigation.FieldLogMainScreen
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchDetailView
 import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchesListView
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.CalendarioScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.MisLotesScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.NuevaTaskScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.NuevoLoteScreen
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home() {
@@ -197,6 +211,30 @@ fun Home() {
                         },
                         batchId = remember { selectedWineBatch.value?.id ?: "" },
                     )
+                }
+
+                composable("Agricolas") {
+                    MainScreen(navController = navController)
+                }
+                composable("nuevaTask") {
+                    NuevaTaskScreen(navController = navController)
+                }
+                composable("calendario") {
+                    val factory = remember { MainViewModelFactory() }
+                    val viewModel: MainViewModel = viewModel(factory = factory)
+
+                    CalendarioScreen(navController = navController, viewModel = viewModel)
+                }
+
+                composable("misLotes") {
+                    MisLotesScreen(navController = navController)
+                }
+
+                composable("nuevoLote") {
+                    val factory = remember { MainViewModelFactory() }
+                    val viewModel: MainViewModel = viewModel(factory = factory)
+
+                    NuevoLoteScreen(navController = navController, viewModel = viewModel)
                 }
 
                 // Nueva ruta para el Historial de Producción
