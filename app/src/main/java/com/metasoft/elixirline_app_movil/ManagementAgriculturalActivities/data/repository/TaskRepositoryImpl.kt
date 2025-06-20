@@ -17,7 +17,8 @@ class TaskRepositoryImpl(
                 description = dto.description,
                 scheduledDate = dto.scheduledDate,
                 parcelId = dto.parcelId ?: "",
-                status = dto.status ?: 0
+                status = dto.status ?: 0,
+                responsible = dto.responsible
             )
         }
     }
@@ -32,9 +33,9 @@ class TaskRepositoryImpl(
                 parcelId = task.parcelId,
                 assignedTo = "uuid-user-1",
                 scheduledDate = task.scheduledDate,
-                status = task.status
+                status = task.status,
+                responsible = task.responsible
             )
         )
     }
 }
-

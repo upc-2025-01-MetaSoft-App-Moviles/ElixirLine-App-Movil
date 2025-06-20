@@ -16,9 +16,11 @@ class ParcelRepositoryImpl(
                 id = dto.parcelId,
                 name = dto.name ?: "Nombre desconocido",
                 cropType = dto.cropType ?: "Sin tipo de cultivo",
+                location = dto.location,
                 growthStage = dto.growthStage,
                 lastTask = dto.lastTask,
-                yieldEstimate = "Sin estimar"
+                yieldEstimate = dto.yieldEstimate,
+                status = dto.status
             )
         }
     }
@@ -30,9 +32,11 @@ class ParcelRepositoryImpl(
                 name = parcel.name,
                 area = 1.5,
                 cropType = parcel.cropType,
-                location = "Ubicación desconocida",
+                location = parcel.location,
                 growthStage = parcel.growthStage,
-                lastTask = parcel.lastTask
+                lastTask = parcel.lastTask,
+                yieldEstimate = parcel.yieldEstimate,
+                status = parcel.status
             )
         )
     }

@@ -47,7 +47,7 @@ fun NuevoLoteScreen(navController: NavHostController) {
     var variedad by remember { mutableStateOf("") }
     var viñedo by remember { mutableStateOf("") }
     var fechaRecepcion by remember { mutableStateOf("") }
-    var estado by remember { mutableStateOf("") }
+    var status by remember { mutableStateOf("") }
     var etapa by remember { mutableStateOf("") }
     var cantidad by remember { mutableStateOf("") }
     var notas by remember { mutableStateOf("") }
@@ -145,12 +145,12 @@ fun NuevoLoteScreen(navController: NavHostController) {
                     }
 
                     TituloCampo("Estado:")
-                    CampoSeleccion(estado, estados) { estado = it }
+                    CampoSeleccion(status, estados) { status = it }
 
                     TituloCampo("Etapa actual:")
                     CampoSeleccion(etapa, etapas) { etapa = it }
 
-                    TituloCampo("Cantidad (plantas o hectáreas):")
+                    TituloCampo("Cantidad (hectáreas):")
                     CampoTexto(valor = cantidad) { cantidad = it }
 
                     TituloCampo("Notas (Opcional):")
@@ -162,14 +162,33 @@ fun NuevoLoteScreen(navController: NavHostController) {
 
             Button(
                 onClick = {
+                    if (nombreLote.isBlank() ||
+                        variedad.isBlank() ||
+                        viñedo.isBlank() ||
+                        fechaRecepcion.isBlank() ||
+                        status.isBlank() ||
+                        etapa.isBlank() ||
+                        cantidad.isBlank()
+                    ) {
+                        Toast.makeText(
+                            context,
+                            "Por favor completa todos los campos antes de guardar.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return@Button
+                    }
+
                     val nuevoLote = Parcel(
                         id = UUID.randomUUID().toString(),
                         name = nombreLote,
                         cropType = variedad,
+                        location = viñedo,
                         growthStage = etapa,
                         lastTask = "",
-                        yieldEstimate = ""
+                        yieldEstimate = cantidad,
+                        status = status
                     )
+
                     viewModel.addParcel(nuevoLote) {
                         navController.previousBackStackEntry
                             ?.savedStateHandle

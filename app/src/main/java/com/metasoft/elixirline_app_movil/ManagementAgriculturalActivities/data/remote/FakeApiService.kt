@@ -78,7 +78,8 @@ class FakeApiService : ApiService {
             parcelId = "uuid-parcel-1",
             assignedTo = "uuid-user-1",
             scheduledDate = "2025-06-13T08:00:00Z",
-            status = 0
+            status = 0,
+            responsible = "Encargado de ejemplo"
         )
     }
 
@@ -88,6 +89,7 @@ class FakeApiService : ApiService {
 
     override suspend fun deleteTask(taskId: String) {
     }
+
 
     override suspend fun getWeather(): WeatherDto {
         val temperatura = (20..35).random().toString() + "°C"

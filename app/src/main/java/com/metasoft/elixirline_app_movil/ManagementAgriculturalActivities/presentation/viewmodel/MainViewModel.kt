@@ -1,5 +1,7 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.model.ParcelDto
@@ -16,6 +18,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 class MainViewModel(
     private val getWeatherUseCase: GetWeatherUseCase,
@@ -95,6 +100,32 @@ class MainViewModel(
             }
 
             onComplete()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTasksPorFecha(): Map<LocalDate, String> {
+        val iconosPorTipo = mapOf(
+            "Riego" to "💧",
+            "Poda" to "✂️",
+            "Fertilización" to "🧪",
+            "Cosecha" to "🍇",
+            "Siembra" to "🌱",
+            "MuchasActividades" to "📌"
+        )
+
+        return _Tasks.value.groupBy { task ->
+            Instant.parse(task.scheduledDate)
+                .atZone(ZoneId.of("America/Lima"))
+                .toLocalDate()
+        }.mapValues { entry ->
+            val tasksDelDia = entry.value
+            if (tasksDelDia.size == 1) {
+                val tipo = tasksDelDia.first().title
+                iconosPorTipo[tipo] ?: ""
+            } else {
+                "📌"
+            }
         }
     }
 }

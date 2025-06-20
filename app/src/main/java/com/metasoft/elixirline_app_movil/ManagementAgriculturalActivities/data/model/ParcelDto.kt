@@ -7,5 +7,7 @@ data class ParcelDto(
     val cropType: String,
     val location: String,
     val growthStage: String,
-    val lastTask: String
+    val lastTask: String,
+    val yieldEstimate: String,
+    val status: String
 )

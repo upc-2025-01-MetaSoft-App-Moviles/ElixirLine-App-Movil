@@ -10,7 +10,9 @@ fun ParcelDto.toDomain(): Parcel {
         cropType = cropType,
         growthStage = growthStage,
         lastTask = lastTask,
-        yieldEstimate = "Sin estimar"
+        yieldEstimate = yieldEstimate,
+        location = location,
+        status = status
     )
 }
 
@@ -20,9 +22,11 @@ fun Parcel.toDto(): ParcelDto {
         name = name,
         area = 1.5,
         cropType = cropType,
-        location = "Ubicación simulada",
+        location = location,
         growthStage = growthStage,
-        lastTask = lastTask
+        lastTask = lastTask,
+        yieldEstimate = yieldEstimate,
+        status = status
     )
 }
 

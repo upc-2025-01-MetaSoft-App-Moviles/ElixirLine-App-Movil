@@ -188,9 +188,18 @@ fun NuevaTaskScreen(navController: NavController) {
                         return@Button
                     }
 
+                    if (!hora.matches(Regex("\\d{1,2}:\\d{2}"))) {
+                        Toast.makeText(context, "Hora inválida. Usa formato HH:mm", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    val horaCorregida = corregirHoraInput(hora)
+
+                    val zonaPeru = ZoneId.of("America/Lima")
+
                     val parsedDate = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("d/M/yyyy"))
-                        .atTime(LocalTime.parse(hora, DateTimeFormatter.ofPattern("HH:mm")))
-                        .atZone(ZoneId.systemDefault())
+                        .atTime(LocalTime.parse(horaCorregida, DateTimeFormatter.ofPattern("HH:mm")))
+                        .atZone(zonaPeru)
                         .toInstant()
                         .toString()
 
@@ -203,7 +212,8 @@ fun NuevaTaskScreen(navController: NavController) {
                             description = notas,
                             scheduledDate = parsedDate,
                             parcelId = loteSeleccionado!!.id,
-                            status = 0
+                            status = 0,
+                            responsible = responsable
                         )
                         viewModel.addTask(nuevaTask) {
                             Toast.makeText(context, "Actividad guardada", Toast.LENGTH_SHORT).show()
@@ -224,4 +234,15 @@ fun NuevaTaskScreen(navController: NavController) {
         }
     }
 }
+
+fun corregirHoraInput(hora: String): String {
+    val partes = hora.split(":")
+    if (partes.size == 2) {
+        val horaFormateada = partes[0].padStart(2, '0')
+        val minutosFormateados = partes[1].padStart(2, '0')
+        return "$horaFormateada:$minutosFormateados"
+    }
+    return hora
+}
+
 

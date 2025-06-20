@@ -150,7 +150,7 @@ fun MisLotesScreen(navController: NavController) {
                             Text(
                                 buildAnnotatedString {
                                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                        append("Rendimiento estimado: ")
+                                        append("Cantidad estimado: ")
                                     }
                                     append(lote.yieldEstimate)
                                 },

@@ -1,8 +1,10 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,22 +21,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
+import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarioScreen(navController: NavController) {
+fun CalendarioScreen(navController: NavController, viewModel: MainViewModel) {
     val darkRed = Color(0xFF8B0000)
     val fondo = Color(0xFFF2F8FF)
 
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
+    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     val primerDiaMes = currentMonth.atDay(1)
-    val diasEnMes = currentMonth.lengthOfMonth()
     val primerDiaSemana = (primerDiaMes.dayOfWeek.value % 7)
     val totalDiasMes = currentMonth.lengthOfMonth()
 
@@ -49,15 +56,24 @@ fun CalendarioScreen(navController: NavController) {
 
     val mesNombre = currentMonth.month
         .getDisplayName(TextStyle.FULL, Locale("es", "ES"))
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale("es", "ES")) else it.toString() }
+        .replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale(
+                    "es",
+                    "ES"
+                )
+            ) else it.toString()
+        }
 
-    val TasksPorFecha = mapOf(
-        currentMonth.atDay(3) to "💧",
-        currentMonth.atDay(7) to "✂️",
-        currentMonth.atDay(12) to "🧪",
-        currentMonth.atDay(18) to "🍇",
-        currentMonth.atDay(25) to "🌱"
-    )
+    val tasksPorFecha = viewModel.getTasksPorFecha()
+    val tasks = viewModel.Tasks.collectAsState().value
+    val parcels = viewModel.parcels.collectAsState().value
+
+    val tasksPorFechaReal = tasks.groupBy {
+        Instant.parse(it.scheduledDate)
+            .atZone(ZoneId.of("America/Lima"))
+            .toLocalDate()
+    }
 
     Scaffold(
         topBar = {
@@ -67,7 +83,11 @@ fun CalendarioScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = darkRed)
@@ -109,7 +129,10 @@ fun CalendarioScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFD9D9D9)),
-                border = ButtonDefaults.outlinedButtonBorder.copy(width = 2.dp, brush = SolidColor(darkRed))
+                border = ButtonDefaults.outlinedButtonBorder.copy(
+                    width = 2.dp,
+                    brush = SolidColor(darkRed)
+                )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(
@@ -175,10 +198,15 @@ fun CalendarioScreen(navController: NavController) {
                                                 color = Color.Black,
                                                 fontSize = 14.sp
                                             )
-                                            Text(
-                                                text = TasksPorFecha[dia] ?: "",
-                                                fontSize = 16.sp
-                                            )
+                                            tasksPorFecha[dia]?.let { icono ->
+                                                Text(
+                                                    text = icono,
+                                                    fontSize = 16.sp,
+                                                    modifier = Modifier.clickable {
+                                                        selectedDate = dia
+                                                    }
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -186,10 +214,10 @@ fun CalendarioScreen(navController: NavController) {
                         }
                     }
                 }
+
+
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -200,7 +228,58 @@ fun CalendarioScreen(navController: NavController) {
                 Text("🧪 Aplicación (fertilizante/pesticida)", color = Color.Black)
                 Text("🍇 Cosecha", color = Color.Black)
                 Text("🌱 Siembra o plantación nueva", color = Color.Black)
+                Text("📌 2 o más Actividades", color = Color.Black)
             }
+        }
+        selectedDate?.let { date ->
+            val actividadesDelDia = tasksPorFechaReal[date] ?: emptyList()
+            AlertDialog(
+                onDismissRequest = { selectedDate = null },
+                confirmButton = {
+                    TextButton(onClick = { selectedDate = null }) { Text("Cerrar") }
+                },
+                title = { Text("Detalles de ${date.dayOfMonth}/${date.monthValue}/${date.year}") },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 400.dp)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        if (actividadesDelDia.isEmpty()) {
+                            Text("No hay actividades para este día.")
+                        } else {
+                            actividadesDelDia.forEach { task ->
+                                val parcel = viewModel.parcels.value.find { it.id == task.parcelId }
+
+                                Text("Actividad: ${task.title}", fontWeight = FontWeight.Bold)
+                                Text("Descripción: ${task.description}")
+                                val zonedDateTime = Instant.parse(task.scheduledDate)
+                                    .atZone(ZoneId.of("America/Lima"))
+
+                                Text("Fecha: ${zonedDateTime.toLocalDate()}")
+                                Text("Hora: ${zonedDateTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"))}")
+                                Text("Responsable: ${task.responsible}")
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                parcel?.let {
+                                    Text("Lote: ${it.name}", fontWeight = FontWeight.Bold)
+                                    Text("Variedad: ${it.cropType}")
+                                    Text("Viñedo: ${it.location}")
+                                    Text("Estado: ${it.status ?: "No especificado"}")
+                                    Text("Etapa Actual: ${it.growthStage}")
+                                    Text("Cantidad: ${it.yieldEstimate}")
+                                } ?: Text("Información de lote no encontrada.")
+
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Divider(color = Color.Gray, thickness = 1.dp)
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
+                    }
+                }
+            )
         }
     }
 }

@@ -7,5 +7,6 @@ data class TaskDto(
     val parcelId: String,
     val assignedTo: String,
     val scheduledDate: String,
-    val status: Int
+    val status: Int,
+    val responsible: String
 )
