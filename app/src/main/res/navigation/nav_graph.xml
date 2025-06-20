@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/workerListFragment">
+
+    <fragment
+        android:id="@+id/workerListFragment"
+        android:name="com.metasoft.elixirline_app_movil.presentation.view.worker.WorkerListFragment"
+        android:label="Lista de trabajadores"
+        tools:layout="@layout/fragment_worker_list">
+
+        <action
+            android:id="@+id/action_workerListFragment_to_workerFormFragment"
+            app:destination="@id/workerFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workerFormFragment"
+        android:name="com.metasoft.elixirline_app_movil.presentation.view.worker.WorkerFormFragment"
+        android:label="Formulario de trabajador"
+        tools:layout="@layout/fragment_worker_form" />
+
+</navigation>

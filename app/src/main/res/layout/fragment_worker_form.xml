@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="32dp">
+
+        <!-- Botón retroceso -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_revert"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Volver"
+            android:tint="@android:color/white"
+            android:backgroundTint="#880000"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Formulario Trabajador"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="#880000"
+            android:padding="16dp" />
+
+        <!-- Campos -->
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre completo"
+            android:inputType="textPersonName"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/etDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="DNI"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/etCelular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Celular"
+            android:inputType="phone"/>
+
+        <EditText
+            android:id="@+id/etRol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Rol del trabajador"
+            android:inputType="text"/>
+
+        <CheckBox
+            android:id="@+id/cbActivo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activo actualmente"/>
+
+        <!-- Botón guardar -->
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GUARDAR"
+            android:backgroundTint="#8800d4"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Footer -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ElixirLine"
+            android:gravity="center"
+            android:background="#880000"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+</ScrollView>
