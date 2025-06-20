@@ -7,5 +7,10 @@ data class WorkerEntity(
     val celular: String,
     val rol: String,
     val fechaInicio: String,
-    val activo: Boolean
+    val fechaFinContrato: String,
+    val activo: Boolean,
+    val fotoPerfil: String = "",
+    val tipoContrato: String = "",
+    val zonaAsignada: String = "",
+    val nivelExperiencia: String = ""
 )

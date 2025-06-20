@@ -1,51 +1,30 @@
 package com.metasoft.elixirline_app_movil.winemakingprocess.presentation.navigation
+
 import com.metasoft.elixirline_app_movil.ProductionHistory.presentation.view.FindAllProductionHistoryView
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.navigation.AppNavHost
+import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
+import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchDetailView
+import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchesListView
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
-import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchDetailView
-import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchesListView
-import kotlinx.coroutines.launch
+import androidx.navigation.compose.*
 
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home() {
     val navController = rememberNavController()
-
     val selectedWineBatch = remember { mutableStateOf<WineBatchResponse?>(null) }
     val selectedIndex = remember { mutableStateOf(0) }
 
@@ -53,16 +32,15 @@ fun Home() {
     val scope = rememberCoroutineScope()
 
     val navigationItems = listOf(
-        NavigationItem(Icons.Default.Refresh, "Prceso de Vinificación", "WineBatches"),
-        NavigationItem(Icons.Default.Create, "Gestion de Insumos", "Insumos"),
-        NavigationItem(Icons.Default.Place, "Actividades Agricolas", "Agricolas"),
-        NavigationItem(Icons.Default.AccountBox, "Gestion de Empleados", "Empleados"),
+        NavigationItem(Icons.Default.Refresh, "Proceso de Vinificación", "WineBatches"),
+        NavigationItem(Icons.Default.Create, "Gestión de Insumos", "Insumos"),
+        NavigationItem(Icons.Default.Place, "Actividades Agrícolas", "Agricolas"),
+        NavigationItem(Icons.Default.AccountBox, "Gestión de Empleados", "Empleados"),
         NavigationItem(Icons.Default.Info, "Historial de Producción", "ProductionHistory"),
     )
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-
         drawerContent = {
             ModalDrawerSheet {
                 Text(
@@ -103,24 +81,19 @@ fun Home() {
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        // Lógica para cerrar sesión o redirigir
                         navController.navigate("Login") {
                             popUpTo(0) // Limpia el backstack
                         }
                     }
                 )
-
             }
-
         }
     ) {
         Scaffold(
-
             bottomBar = {
                 BottomAppBar(
                     containerColor = Color(0xFF8B0000),
                 ) {
-
                     NavigationBarItem(
                         selected = false,
                         onClick = {
@@ -134,7 +107,7 @@ fun Home() {
                             Text("Perfil", color = Color.White)
                         }
                     )
-                    NavigationBarItem (
+                    NavigationBarItem(
                         selected = false,
                         onClick = {
                             selectedIndex.value = 0
@@ -147,11 +120,9 @@ fun Home() {
                             Text("Menu", color = Color.White)
                         }
                     )
-
                 }
             },
-
-            ) { padding ->
+        ) { padding ->
             NavHost(
                 navController = navController,
                 startDestination = "WineBatches",
@@ -167,9 +138,7 @@ fun Home() {
                         onAdd = {
                             navController.navigate("WineBatchesAdd")
                         },
-                        onClick = {
-                            //Al seleccionar un lote, se guarda el lote seleccionado
-                                wineBatch ->
+                        onClick = { wineBatch ->
                             selectedWineBatch.value = wineBatch
                             navController.navigate("WineBatchDetail")
                         },
@@ -179,7 +148,8 @@ fun Home() {
                         }
                     )
                 }
-                composable("WineBatchDetail"){
+
+                composable("WineBatchDetail") {
                     WineBatchDetailView(
                         onBack = {
                             navController.navigate("WineBatches") {
@@ -188,21 +158,22 @@ fun Home() {
                         },
                         onAddStageClick = {
                             navController.navigate("WineBatchStageAdd/${it.arguments?.getString("wineBatchId") ?: ""}")
-                            // Pasar el ID del lote seleccionado al agregar una nueva etapa
                         },
                         batchId = remember { selectedWineBatch.value?.id ?: "" },
                     )
                 }
 
-                // Nueva ruta para el Historial de Producción
                 composable("ProductionHistory") {
                     FindAllProductionHistoryView()
+                }
+
+                composable("Empleados") {
+                    AppNavHost()
                 }
             }
         }
     }
 }
-
 
 data class NavigationItem(
     val icon: ImageVector,

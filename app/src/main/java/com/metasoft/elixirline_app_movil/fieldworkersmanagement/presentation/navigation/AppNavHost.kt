@@ -16,11 +16,21 @@ fun AppNavHost() {
         composable("worker_list") {
             WorkerListScreen(
                 workers = workerViewModel.allWorkers,
-                onAddClick = { navController.navigate("worker_form") }
+                onAddClick = {
+                    workerViewModel.assignWorkerToEdit(null) // ✅ Modo crear
+                    navController.navigate("worker_form")
+                },
+                onDelete = { workerViewModel.delete(it) },
+                onEdit = { worker ->
+                    workerViewModel.assignWorkerToEdit(worker) // ✅ Modo editar
+                    navController.navigate("worker_form")
+                }
             )
         }
+
         composable("worker_form") {
             WorkerFormScreen(
+                workerToEdit = workerViewModel.workerToEdit,
                 onSave = { worker ->
                     workerViewModel.insert(worker)
                     navController.popBackStack()
