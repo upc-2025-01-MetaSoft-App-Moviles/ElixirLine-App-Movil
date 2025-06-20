@@ -1,8 +1,8 @@
-package com.metasoft.elixirline_app_movil.presentation.viewmodel.worker
+package com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.viewmodel.worker
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.metasoft.elixirline_app_movil.data.local.worker.WorkerEntity
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.data.local.worker.WorkerEntity
 
 class WorkerViewModel : ViewModel() {
 

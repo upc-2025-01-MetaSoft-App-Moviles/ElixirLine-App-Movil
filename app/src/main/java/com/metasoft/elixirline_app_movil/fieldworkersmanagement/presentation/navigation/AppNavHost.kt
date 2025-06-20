@@ -1,11 +1,11 @@
-package com.metasoft.elixirline_app_movil.presentation.navigation
+package com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
-import com.metasoft.elixirline_app_movil.presentation.view.worker.WorkerFormScreen
-import com.metasoft.elixirline_app_movil.presentation.view.worker.WorkerListScreen
-import com.metasoft.elixirline_app_movil.presentation.viewmodel.worker.WorkerViewModel
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.view.worker.WorkerFormScreen
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.view.worker.WorkerListScreen
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.viewmodel.worker.WorkerViewModel
 
 @Composable
 fun AppNavHost() {

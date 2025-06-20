@@ -1,4 +1,4 @@
-package com.metasoft.elixirline_app_movil.data.local.worker
+package com.metasoft.elixirline_app_movil.fieldworkersmanagement.data.local.worker
 
 data class WorkerEntity(
     val id: Int = 0,

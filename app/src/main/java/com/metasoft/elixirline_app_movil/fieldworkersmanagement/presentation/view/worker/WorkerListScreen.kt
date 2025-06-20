@@ -1,4 +1,4 @@
-package com.metasoft.elixirline_app_movil.presentation.view.worker
+package com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.view.worker
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.metasoft.elixirline_app_movil.data.local.worker.WorkerEntity
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.data.local.worker.WorkerEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
