@@ -18,7 +18,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -63,37 +62,36 @@ fun WineBatchDetailView(
 ) {
 
 
-    val wineBatch = wineBatchDetailViewModel.selectedBatch.collectAsState().value
-    val stagesByBatchId = stagesByWineBatchViewModel.stagesByBatchId.collectAsState().value
 
 
-    if (wineBatch == null) {
-        wineBatchDetailViewModel.getWineBatchById(batchId)
-    }
-    if (stagesByBatchId.isEmpty()) {
-        stagesByWineBatchViewModel.getStagesByBatchId(batchId)
-    }
+    stagesByWineBatchViewModel.getStagesByBatchId(batchId)
+    val stagesByBatchId = stagesByWineBatchViewModel.stagesByBatchId.collectAsState()
+
+
+    wineBatchDetailViewModel.getWineBatchById(batchId)
+    val wineBatch = wineBatchDetailViewModel.selectedBatch.collectAsState()
+
 
     // Log para depuración
     Log.d("WineBatchDetail", "Selected Batch: $wineBatch")
     Log.d("WineBatchDetail", "Stages by Batch ID: $stagesByBatchId")
 
     // Etapas de vinificación
-    val reception = stagesByBatchId.firstOrNull()?.receptionStage
+    val reception = stagesByBatchId.value.firstOrNull()?.receptionStage
     Log.d("WineBatchDetail", "Reception Stage: $reception")
-    val correction = stagesByBatchId.firstOrNull()?.correctionStage
+    val correction = stagesByBatchId.value.firstOrNull()?.correctionStage
     Log.d("WineBatchDetail", "Correction Stage: $correction")
-    val fermentation = stagesByBatchId.firstOrNull()?.fermentationStage
+    val fermentation = stagesByBatchId.value.firstOrNull()?.fermentationStage
     Log.d("WineBatchDetail", "Fermentation Stage: $fermentation")
-    val pressing = stagesByBatchId.firstOrNull()?.pressingStage
+    val pressing = stagesByBatchId.value.firstOrNull()?.pressingStage
     Log.d("WineBatchDetail", "Pressing Stage: $pressing")
-    val clarification = stagesByBatchId.firstOrNull()?.clarificationStage
+    val clarification = stagesByBatchId.value.firstOrNull()?.clarificationStage
     Log.d("WineBatchDetail", "Clarification Stage: $clarification")
-    val aging = stagesByBatchId.firstOrNull()?.agingStage
+    val aging = stagesByBatchId.value.firstOrNull()?.agingStage
     Log.d("WineBatchDetail", "Aging Stage: $aging")
-    val filtration = stagesByBatchId.firstOrNull()?.filtrationStage
+    val filtration = stagesByBatchId.value.firstOrNull()?.filtrationStage
     Log.d("WineBatchDetail", "Filtration Stage: $filtration")
-    val bottling = stagesByBatchId.firstOrNull()?.bottlingStage
+    val bottling = stagesByBatchId.value.firstOrNull()?.bottlingStage
     Log.d("WineBatchDetail", "Bottling Stage: $bottling")
 
 
@@ -119,16 +117,26 @@ fun WineBatchDetailView(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            when (wineBatch) {
-                null -> CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
+            when (wineBatch.value) {
+
+                // Si el lote de vino no está cargado o es nulo
+                null -> {
+                    // Mostrar un mensaje de carga o error
+                    Text(
+                        "Cargando lote de vino...",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        color = Color.Gray
+                    )
+                }
 
                 else -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
+                        // Mostrar detalle del lote
                         item {
-                            WineBatchDetailCard(wineBatch)
+                            WineBatchDetailCard(wineBatch.value)
                         }
 
                         item {
@@ -156,57 +164,20 @@ fun WineBatchDetailView(
 
                         // Aquí puedes iterar o mostrar una etapa específica
 
-                        item {
-                            if (reception != null) {
-                                ReceptionStageCard(reception)
-                            }
-                        }
-
-                        item {
-                            if (correction != null) {
-                                CorrectionStageCard(correction)
-                            }
-                        }
-
-                        item {
-                            if (fermentation != null) {
-                                FermentationStageCard(fermentation)
-                            }
-                        }
-
-                        item {
-                            if (pressing != null) {
-                                PressingStageCard(pressing)
-                            }
-                        }
-
-                        item {
-                            if (clarification != null) {
-                                ClarificationStageCard(clarification)
-                            }
-                        }
-
-                        item {
-                            if (aging != null) {
-                                AgingStageCard(aging)
-                            }
-                        }
-
-                        item {
-                            if (filtration != null) {
-                                FiltrationStageCard(filtration)
-                            }
-                        }
-
-                        item {
-                            if (bottling != null) {
-                                BottlingStageCard(bottling)
-                            }
-                        }
+                        // Etapas condicionales
+                        item { if (reception != null) ReceptionStageCard(reception) }
+                        item { if (correction != null) CorrectionStageCard(correction) }
+                        item { if (fermentation != null) FermentationStageCard(fermentation) }
+                        item { if (pressing != null) PressingStageCard(pressing) }
+                        item { if (clarification != null) ClarificationStageCard(clarification) }
+                        item { if (aging != null) AgingStageCard(aging) }
+                        item { if (filtration != null) FiltrationStageCard(filtration) }
+                        item { if (bottling != null) BottlingStageCard(bottling) }
 
                         // Si no hay etapas, mostrar un mensaje
 
-                        if (stagesByBatchId.isEmpty()) {
+                        // Mensaje si no hay etapas
+                        if (stagesByBatchId.value.isEmpty()) {
                             item {
                                 Text(
                                     "No hay etapas de vinificación registradas para este lote.",
@@ -430,9 +401,8 @@ fun BottlingStageCard(bottling: BottlingStageResponse) {
     }
 }
 
-
 @Composable
-fun WineBatchDetailCard(wineBatch: WineBatchResponse) {
+fun WineBatchDetailCard(wineBatch: WineBatchResponse?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -447,7 +417,7 @@ fun WineBatchDetailCard(wineBatch: WineBatchResponse) {
             horizontalAlignment = Alignment.Start
         ) {
             AsyncImage(
-                model = wineBatch.urlImage,
+                model = wineBatch?.urlImage,
                 contentDescription = "Wine Batch Image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -456,17 +426,24 @@ fun WineBatchDetailCard(wineBatch: WineBatchResponse) {
                 contentScale = ContentScale.Crop
             )
 
-            InfoRow(label = "Creado por:", value = wineBatch.createdBy)
-            InfoRow(label = "Código Interno:", value = wineBatch.internalCode)
-            InfoRow(label = "Campaña de Cosecha:", value = wineBatch.harvestCampaign)
-            InfoRow(label = "Viñedo de Origen:", value = wineBatch.vineyardOrigin)
-            InfoRow(label = "Variedad de Uva:", value = wineBatch.grapeVariety)
-            InfoRow(label = "Cantidad Inicial de Uva (kg):", value = wineBatch.initialGrapeQuantityKg.toString())
-            InfoRow(label = "Estado:", value = wineBatch.status)
-            InfoRow(label = "Etapa Actual:", value = wineBatch.currentStage)
+            InfoRow(label = "Creado por:", value = wineBatch?.createdBy ?: "N/A")
+            InfoRow(label = "Código Interno:", value = wineBatch?.internalCode ?: "N/A")
+            InfoRow(label = "Campaña de Cosecha:", value = wineBatch?.harvestCampaign ?: "N/A")
+            InfoRow(label = "Viñedo de Origen:", value = wineBatch?.vineyardOrigin ?: "N/A")
+            InfoRow(label = "Variedad de Uva:", value = wineBatch?.grapeVariety ?: "N/A")
+
+            // ✅ Aquí está corregido el manejo de nullables numéricos
+            InfoRow(
+                label = "Cantidad Inicial de Uva (kg):",
+                value = wineBatch?.initialGrapeQuantityKg?.toString() ?: "N/A"
+            )
+
+            InfoRow(label = "Estado:", value = wineBatch?.status ?: "N/A")
+            InfoRow(label = "Etapa Actual:", value = wineBatch?.currentStage ?: "N/A")
         }
     }
 }
+
 
 @Composable
 fun InfoRow(label: String, value: String) {

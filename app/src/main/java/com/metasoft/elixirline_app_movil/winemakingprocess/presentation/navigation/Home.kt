@@ -187,7 +187,7 @@ fun Home() {
                             navController.navigate("WineBatchStageAdd/${it.arguments?.getString("wineBatchId") ?: ""}")
                             // Pasar el ID del lote seleccionado al agregar una nueva etapa
                         },
-                        batchId = selectedWineBatch.value?.id ?: "",
+                        batchId = remember { selectedWineBatch.value?.id ?: "" },
                     )
 
                 }
