@@ -23,7 +23,7 @@ class MainViewModelFactory : ViewModelProvider.Factory {
             val taskUseCase = GetTasksUseCase(taskRepo)
             val parcelUseCase = GetParcelsUseCase(parcelRepo)
 
-            return MainViewModel(weatherUseCase, taskUseCase, parcelUseCase, parcelRepo) as T
+            return MainViewModel(weatherUseCase, taskUseCase, parcelUseCase, parcelRepo, taskRepo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

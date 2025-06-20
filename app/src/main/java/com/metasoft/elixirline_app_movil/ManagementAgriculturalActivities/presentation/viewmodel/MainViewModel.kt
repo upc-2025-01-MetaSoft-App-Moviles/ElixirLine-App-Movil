@@ -7,9 +7,11 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Weather
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.ParcelRepository
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.repository.TaskRepository
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetParcelsUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetWeatherUseCase
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.usecase.GetTasksUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,8 @@ class MainViewModel(
     private val getWeatherUseCase: GetWeatherUseCase,
     private val getTasksUseCase: GetTasksUseCase,
     private val getParcelsUseCase: GetParcelsUseCase,
-    private val parcelRepository: ParcelRepository
+    private val parcelRepository: ParcelRepository,
+    private val taskRepository: TaskRepository
 ) : ViewModel() {
 
     private val _weatherInfo = MutableStateFlow<Weather?>(null)
@@ -33,9 +36,20 @@ class MainViewModel(
 
     init {
         loadAllData()
+        startWeatherUpdates()
     }
 
-    private fun loadAllData() {
+    private fun startWeatherUpdates() {
+        viewModelScope.launch {
+            while (true) {
+                val weatherData = getWeatherUseCase()
+                _weatherInfo.value = weatherData
+                delay(10000)
+            }
+        }
+    }
+
+    fun loadAllData() {
         viewModelScope.launch {
             _weatherInfo.value = getWeatherUseCase()
             _Tasks.value = getTasksUseCase()
@@ -51,7 +65,6 @@ class MainViewModel(
         }
     }
 
-
     fun addParcel(parcel: Parcel, onComplete: () -> Unit) {
         viewModelScope.launch {
             println("[ViewModel] Llamando a addParcel con: $parcel")
@@ -63,4 +76,25 @@ class MainViewModel(
         }
     }
 
+    fun addTask(task: Task, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            println("[ViewModel] Llamando a addTask con: $task")
+
+            taskRepository.addTask(task)
+
+            val updatedTasks = taskRepository.getTasks()
+            _Tasks.value = updatedTasks
+            println("[ViewModel] Tasks actualizados desde repository: $updatedTasks")
+
+            _parcels.value = _parcels.value.map { parcel ->
+                if (parcel.id == task.parcelId) {
+                    parcel.copy(lastTask = task.title)
+                } else {
+                    parcel
+                }
+            }
+
+            onComplete()
+        }
+    }
 }

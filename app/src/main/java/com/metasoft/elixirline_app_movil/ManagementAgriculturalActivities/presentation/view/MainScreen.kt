@@ -2,6 +2,7 @@ package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.prese
 
 import android.os.Build
 import android.text.format.DateUtils.formatDateTime
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -34,8 +37,13 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavController) {
+    val activity = LocalContext.current as ComponentActivity
     val factory = remember { MainViewModelFactory() }
-    val viewModel: MainViewModel = viewModel(factory = factory)
+    val viewModel: MainViewModel = ViewModelProvider(activity, factory)[MainViewModel::class.java]
+
+    LaunchedEffect(Unit) {
+        viewModel.loadAllData()
+    }
 
     val weather by viewModel.weatherInfo.collectAsStateWithLifecycle()
     val tasks by viewModel.Tasks.collectAsStateWithLifecycle()

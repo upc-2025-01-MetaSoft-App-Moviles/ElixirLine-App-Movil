@@ -46,17 +46,7 @@ class FakeApiService : ApiService {
         }
     }
 
-    private val fakeTasks = mutableListOf<TaskDto>(
-        TaskDto(
-            taskId = "uuid-task-1",
-            title = "Riego en lote A",
-            description = "Riego temprano",
-            parcelId = "uuid-parcel-1",
-            assignedTo = "uuid-user-1",
-            scheduledDate = "2025-06-13T08:00:00Z",
-            status = 0
-        )
-    )
+    private val fakeTasks = mutableListOf<TaskDto>()
 
     override suspend fun getTasks(): List<TaskDto> {
         return fakeTasks
@@ -67,9 +57,18 @@ class FakeApiService : ApiService {
             taskId = task.taskId.ifEmpty { "uuid-task-${System.currentTimeMillis()}" }
         )
         fakeTasks.add(newTask)
+
+        val parcelIndex = fakeParcels.indexOfFirst { it.parcelId == newTask.parcelId }
+        if (parcelIndex != -1) {
+            val updatedParcel = fakeParcels[parcelIndex].copy(lastTask = newTask.title)
+            fakeParcels[parcelIndex] = updatedParcel
+            println("ParcelDto actualizado con nueva tarea: ${fakeParcels[parcelIndex]}")
+        } else {
+            println("No se encontró el ParcelDto para parcelId: ${newTask.parcelId}")
+        }
+
         return newTask
     }
-
 
     override suspend fun getTaskById(taskId: String): TaskDto {
         return TaskDto(
@@ -91,11 +90,17 @@ class FakeApiService : ApiService {
     }
 
     override suspend fun getWeather(): WeatherDto {
+        val temperatura = (20..35).random().toString() + "°C"
+        val descripciones = listOf("Soleado", "Nublado", "Lluvia", "Parcialmente nublado", "Tormenta")
+        val descripcion = descripciones.random()
+        val humedad = (40..80).random().toString() + "%"
+        val viento = (5..20).random().toString() + " km/h"
+
         return WeatherDto(
-            temperatura = "28°C",
-            descripcion = "Soleado",
-            humedad = "60%",
-            viento = "10 km/h"
+            temperatura = temperatura,
+            descripcion = descripcion,
+            humedad = humedad,
+            viento = viento
         )
     }
 

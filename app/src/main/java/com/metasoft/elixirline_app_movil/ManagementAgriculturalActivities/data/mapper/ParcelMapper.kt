@@ -5,21 +5,24 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain
 
 fun ParcelDto.toDomain(): Parcel {
     return Parcel(
-        id = parcelId ?: "",
-        name = name ?: "",
-        cropType = cropType ?: "",
-        growthStage = "Etapa estimada",
-        lastTask = "Sin actividad aún",
+        id = parcelId,
+        name = name,
+        cropType = cropType,
+        growthStage = growthStage,
+        lastTask = lastTask,
         yieldEstimate = "Sin estimar"
     )
 }
 
 fun Parcel.toDto(): ParcelDto {
     return ParcelDto(
-        parcelId = this.id,
-        name = this.name,
+        parcelId = id,
+        name = name,
         area = 1.5,
-        cropType = this.cropType,
-        location = "Ubicación simulada"
+        cropType = cropType,
+        location = "Ubicación simulada",
+        growthStage = growthStage,
+        lastTask = lastTask
     )
 }
+

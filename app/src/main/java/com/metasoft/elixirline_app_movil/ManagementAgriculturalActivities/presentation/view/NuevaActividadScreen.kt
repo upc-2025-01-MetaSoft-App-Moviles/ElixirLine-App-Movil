@@ -1,7 +1,9 @@
 package com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view
 
+import android.os.Build
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,30 +19,44 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.remote.FakeApiService
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.data.repository.TaskRepositoryImpl
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Task
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
+import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.domain.model.Parcel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.UUID
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NuevaTaskScreen(navController: NavController) {
     val darkRed = Color(0xFF8B0000)
     val backgroundColor = Color(0xFFF2F8FF)
     val context = LocalContext.current
-    val taskRepository = TaskRepositoryImpl(FakeApiService())
 
     var tipoTask by remember { mutableStateOf("") }
     val opcionesTask = listOf("Riego", "Fertilización", "Cosecha", "Poda")
 
-    var loteSeleccionado by remember { mutableStateOf("") }
-    val opcionesLote = listOf("Lote A", "Lote B", "Lote C")
+    val factory = remember { MainViewModelFactory() }
+    val viewModel: MainViewModel = viewModel(factory = factory)
+
+    val lotes by viewModel.parcels.collectAsStateWithLifecycle()
+
+    var loteSeleccionado by remember { mutableStateOf<Parcel?>(null) }
+    val opcionesLote = lotes
 
     var fecha by remember { mutableStateOf("") }
     var hora by remember { mutableStateOf("") }
@@ -105,9 +121,13 @@ fun NuevaTaskScreen(navController: NavController) {
             ) {
                 Column(Modifier.padding(16.dp)) {
                     TituloCampo("Seleccionar lote:")
-                    CampoSeleccion(valorActual = loteSeleccionado, opciones = opcionesLote) {
-                        loteSeleccionado = it
-                    }
+                    CampoSeleccion(
+                        valorActual = loteSeleccionado?.name ?: "Seleccionar lote",
+                        opciones = lotes.map { it.name },
+                        onSeleccionar = { nombreSeleccionado ->
+                            loteSeleccionado = lotes.find { it.name == nombreSeleccionado }
+                        }
+                    )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -163,20 +183,34 @@ fun NuevaTaskScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    val nuevaTask = Task(
-                        id = UUID.randomUUID().toString(),
-                        title = tipoTask,
-                        description = notas,
-                        scheduledDate = fecha
-                    )
+                    if (tipoTask.isBlank() || loteSeleccionado?.name.isNullOrBlank() || fecha.isBlank() || hora.isBlank() || responsable.isBlank()) {
+                        Toast.makeText(context, "Por favor completa todos los campos obligatorios.", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        taskRepository.addTask(nuevaTask)
+                    val parsedDate = LocalDate.parse(fecha, DateTimeFormatter.ofPattern("d/M/yyyy"))
+                        .atTime(LocalTime.parse(hora, DateTimeFormatter.ofPattern("HH:mm")))
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toString()
 
-                        withContext(Dispatchers.Main) {
+                    println("Creando Task con parcelId = ${loteSeleccionado?.id} y name = ${loteSeleccionado?.name}")
+
+                    if (loteSeleccionado != null) {
+                        val nuevaTask = Task(
+                            id = UUID.randomUUID().toString(),
+                            title = tipoTask,
+                            description = notas,
+                            scheduledDate = parsedDate,
+                            parcelId = loteSeleccionado!!.id,
+                            status = 0
+                        )
+                        viewModel.addTask(nuevaTask) {
                             Toast.makeText(context, "Actividad guardada", Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         }
+                    } else {
+                        Toast.makeText(context, "Selecciona un lote", Toast.LENGTH_SHORT).show()
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = darkRed),

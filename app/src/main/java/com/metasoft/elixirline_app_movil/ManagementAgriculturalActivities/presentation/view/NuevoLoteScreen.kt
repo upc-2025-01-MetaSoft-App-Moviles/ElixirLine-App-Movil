@@ -167,8 +167,8 @@ fun NuevoLoteScreen(navController: NavHostController) {
                         name = nombreLote,
                         cropType = variedad,
                         growthStage = etapa,
-                        lastTask = "Sin actividad aún",
-                        yieldEstimate = "Sin estimar"
+                        lastTask = "",
+                        yieldEstimate = ""
                     )
                     viewModel.addParcel(nuevoLote) {
                         navController.previousBackStackEntry

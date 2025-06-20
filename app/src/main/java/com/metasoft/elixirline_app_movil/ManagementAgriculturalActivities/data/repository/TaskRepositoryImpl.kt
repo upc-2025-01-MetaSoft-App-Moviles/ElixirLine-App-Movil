@@ -15,10 +15,13 @@ class TaskRepositoryImpl(
                 id = dto.taskId,
                 title = dto.title,
                 description = dto.description,
-                scheduledDate = dto.scheduledDate
+                scheduledDate = dto.scheduledDate,
+                parcelId = dto.parcelId ?: "",
+                status = dto.status ?: 0
             )
         }
     }
+
 
     override suspend fun addTask(task: Task) {
         apiService.createTask(
@@ -26,11 +29,12 @@ class TaskRepositoryImpl(
                 taskId = task.id,
                 title = task.title,
                 description = task.description,
-                parcelId = "uuid-parcel-1",
+                parcelId = task.parcelId,
                 assignedTo = "uuid-user-1",
                 scheduledDate = task.scheduledDate,
-                status = 0
+                status = task.status
             )
         )
     }
 }
+
