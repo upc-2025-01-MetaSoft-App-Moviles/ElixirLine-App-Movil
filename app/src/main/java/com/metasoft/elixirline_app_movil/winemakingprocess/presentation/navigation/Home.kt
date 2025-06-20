@@ -31,10 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.metasoft.elixirline_app_movil.fieldlog.presentation.di.PresentationModule
+import com.metasoft.elixirline_app_movil.fieldlog.presentation.navigation.FieldLogMainScreen
 import com.metasoft.elixirline_app_movil.winemakingprocess.data.remote.response.WineBatchResponse
 import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchDetailView
 import com.metasoft.elixirline_app_movil.winemakingprocess.presentation.view.WineBatchesListView
@@ -58,7 +61,9 @@ fun Home() {
         NavigationItem(Icons.Default.Place, "Actividades Agricolas", "Agricolas"),
         NavigationItem(Icons.Default.AccountBox, "Gestion de Empleados", "Empleados"),
         NavigationItem(Icons.Default.Info, "Historial de Producción", "ProductionHistory"),
+        NavigationItem(Icons.Default.Info, "Bitácora", "FieldLogHistory"),
     )
+
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -198,6 +203,13 @@ fun Home() {
                 composable("ProductionHistory") {
                     FindAllProductionHistoryView()
                 }
+                composable("FieldLogHistory") {
+                    FieldLogMainScreen(
+                        historyViewModel = PresentationModule.getFieldLogHistoryViewModel(),
+                        formViewModel = PresentationModule.getFieldLogViewModel(LocalContext.current)
+                    )
+                }
+
             }
         }
     }
