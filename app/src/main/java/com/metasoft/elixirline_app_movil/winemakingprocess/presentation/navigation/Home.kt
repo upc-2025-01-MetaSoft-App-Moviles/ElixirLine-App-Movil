@@ -54,6 +54,7 @@ import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presen
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.view.NuevoLoteScreen
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModel
 import com.metasoft.elixirline_app_movil.ManagementAgriculturalActivities.presentation.viewmodel.MainViewModelFactory
+import com.metasoft.elixirline_app_movil.fieldworkersmanagement.presentation.navigation.AppNavHost
 import kotlinx.coroutines.launch
 
 
@@ -246,6 +247,9 @@ fun Home() {
                         historyViewModel = PresentationModule.getFieldLogHistoryViewModel(),
                         formViewModel = PresentationModule.getFieldLogViewModel(LocalContext.current)
                     )
+                }
+                composable("Empleados") {
+                    AppNavHost()
                 }
 
             }

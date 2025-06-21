@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    implementation (libs.androidx.core.ktx.v1120)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.transport.runtime)
     implementation(libs.androidx.runtime.livedata)
     ksp(libs.androidx.room.compiler)
-
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
     testImplementation(libs.junit)
